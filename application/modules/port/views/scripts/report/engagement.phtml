@@ -1,1 +1,18 @@
-Testing
+<?php if (count($this->data) > 0): ?>
+<table>
+  <thead>
+    <tr>
+      <th><?php echo implode('</th><th>', array_keys(current($this->data))); ?></th>
+    </tr>
+  </thead>
+  <tbody>
+<?php foreach ($this->data as $row): array_map('htmlentities', $row); ?>
+    <tr>
+      <td><?php echo implode('</td><td>', $row); ?></td>
+    </tr>
+<?php endforeach; ?>
+  </tbody>
+</table>
+<?php endif; ?> 
+
+<h4>There are : <?php echo count($this->data); ?> people in the table</h4>
