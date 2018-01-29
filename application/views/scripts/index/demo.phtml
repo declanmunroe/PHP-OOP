@@ -1,0 +1,30 @@
+<?php
+
+echo '<FORM ACTION="/index/demo" METHOD="post">';
+echo '<select name="year">';
+  for ($m=1950; $m<=$this->latest_year; $m++) {
+    echo '<option value="'.$m.'"';
+    if (date('Y') == $m) {
+      echo 'selected="selected"';
+    }
+    echo '>'.$m.'</option>';
+  }
+  echo '</select>';
+
+  
+  echo '<select name="month">';
+  for ($m=0; $m<12; $m++) {
+    echo '<option value="'.$this->month_array[$m].'"';
+    if (date('F') == $m) {
+      echo 'selected="selected"';
+    }
+    echo '>'.$this->month_array[$m].'</option>';
+  }
+  echo '</select>';
+  ?>
+
+  <input type="SUBMIT">
+  </form>
+
+  <p>Year is <?= $this->year; ?></p>
+  <p>Month is <?= $this->month; ?></p>
