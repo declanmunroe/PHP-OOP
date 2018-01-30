@@ -21,4 +21,10 @@ class Port_ReportController extends Zend_Controller_Action
                             );
         
     }
+
+    public function otherAction()
+    {
+        $members = new Application_Model_DbTable_Members();
+        $this->view->members = $members->fetchAll();
+    }
 }
