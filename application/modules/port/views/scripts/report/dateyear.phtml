@@ -1,0 +1,21 @@
+<?php
+
+print '<FORM ACTION="/port/report/dateyear" METHOD="post">';
+print '<select name="year">';
+  for ($m=1950; $m<=$this->latest_year; $m++) {
+    print '<option value="'.$m.'">'.$m.'</option>';
+  }
+  print '</select>';
+
+  print '<select name="month">';
+  for ($m=0; $m<12; $m++) {
+    print '<option value="'.$this->month_array[$m].'">'.$this->month_array[$m].'</option>';
+  }
+  print '</select>';
+  ?>
+
+  <input type="SUBMIT">
+  </form>
+
+  <p>Year is <?= $this->year; ?></p>
+  <p>Month is <?= $this->month; ?></p>
