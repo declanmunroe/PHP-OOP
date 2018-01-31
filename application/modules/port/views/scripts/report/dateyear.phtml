@@ -17,5 +17,20 @@ print '<select name="year">';
   <input type="SUBMIT">
   </form>
 
-  <p>Year is <?= $this->year; ?></p>
-  <p>Month is <?= $this->month; ?></p>
+  <?php echo $this->year; ?>
+  
+  
+
+<table>
+<tr>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>&nbsp;</th>
+</tr>
+<?php foreach($this->rows as $member) : ?>
+<tr>
+    <td><?php echo $this->escape($member->first_name);?></td> <!-- $member->name_f The name_f refers to the name of the collum in the database table where we are extracting the data -->
+    <td><?php echo $this->escape($member->last_name);?></td>
+</tr>
+<?php endforeach; ?>
+</table>

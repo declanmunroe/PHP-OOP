@@ -2,7 +2,8 @@
 
 class Application_Model_DbTable_Members extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'am_user';
+    protected $_name = 'jos_eb_registrants';
+    protected $_name2 = 'jos_eb_events';
 
     public function getMembers()
     {
