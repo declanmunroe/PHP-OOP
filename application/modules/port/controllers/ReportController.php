@@ -19,11 +19,12 @@ class Port_ReportController extends Zend_Controller_Action
 
     public function otherAction()
     {
-        $members = new Application_Model_DbTable_Members();
-        $where = array('name_f = ?' => 'Steven',
-                       'name_l = ?' => 'Foster',
-                       'phone' => '016222000');
-        $this->view->rows = $members->fetchAll($where);
+        
+        // $members = new Application_Model_DbTable_Members();
+        // $where = array('name_f = ?' => 'Steven',
+        //                'name_l = ?' => 'Foster',
+        //                'phone' => '016222000');
+        // $this->view->rows = $members->fetchAll($where);
         
         //$select = $members->select();
         //$select->where('name_f = ?', 'Steven');
@@ -39,33 +40,32 @@ class Port_ReportController extends Zend_Controller_Action
 
         $this->view->month_array = array("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
 
-        //$this->view->year = "";
-        //$this->view->month = "";
         if ($this->getRequest()->isPost()){
             $formData = $this->getRequest()->getPost();
             $year = $formData['year'];
             $month = $formData['month'];
-            //$this->view->month = $formData['month'];
 
-            $members = new Application_Model_DbTable_Members();                      //working version!!!!!!!!!!!!!!!!!!!
-            //$where = array('name_f = ?' => 'Stephen');
-            //$where = array('added = ?' => $formData['year']);
-            //var_dump($formData['year']);
-            //$this->view->rows = $members->fetchAll($where);
-
-            $select = $members->select();                                                //working version!!!!!!!!!!!!!!!!!!!
-            $select->where('register_date LIKE ?', $year.'%');                           //working version!!!!!!!!!!!!!!!!!!!
-            $select->where('register_date LIKE ?', '%-'.$month.'-%');                       // working version!!!!!!!!!!!!!!!!!!!
-            $this->view->rows = $members->fetchAll($select);                               //working version!!!!!!!!!!!!!!!!!!!
+            // $members = new Application_Model_DbTable_Members();                      //working version!!!!!!!!!!!!!!!!!!!
+            // $select = $members->select();                                                //working version!!!!!!!!!!!!!!!!!!!
+            // $select->where('register_date LIKE ?', $year.'%');                           //working version!!!!!!!!!!!!!!!!!!!
+            // $select->where('register_date LIKE ?', '%-'.$month.'-%');                       // working version!!!!!!!!!!!!!!!!!!!
+            // $this->view->rows = $members->fetchAll($select);                               //working version!!!!!!!!!!!!!!!!!!!
 
             
-            
-            //$select = $members->select();
-            //$select->from(array('t1' => 'jos_eb_registrants'), array());
-            //$select->join(array('t2' => 'jos_eb_events'), 't1.id=t2.id', array());
-            //$select->where('register_date LIKE ?', $year.'%');
-            //$select->where('register_date LIKE ?', '%-'.$month.'-%'); 
-            //$this->view->rows = $members->fetchAll($select);
+            $members = new Application_Model_DbTable_Members();
+            $select = $members->select();
+            $select->setIntegrityCheck(false);
+            $select->from(array('t1' => 'jos_eb_registrants'), array('t1.first_name', 't1.last_name'));
+            $select->join(array('t2' => 'jos_eb_events'), 't1.event_id=t2.id', array('t2.title'));
+            //$select->where('t1.register_date LIKE ?', $year.'%');
+            //$select->where('t1.register_date LIKE ?', '%-'.$month.'-%'); 
+            $select->where('YEAR(t1.register_date) = ?', $year);
+            $select->where('MONTH(t1.register_date) = ?', $month); 
+
+            $this->view->rows = $members->fetchAll($select);
+
+            echo $select;
+
         }
     }
 
