@@ -69,5 +69,25 @@ class Port_ReportController extends Zend_Controller_Action
         }
     }
 
+    public function ajaxdataAction()
+    {
+        $this->view->currently_selected = date('Y');
+        $this->view->earliest_year = 1950; 
+        $this->view->latest_year = date('Y');
+
+
+        $this->view->month_array = array("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
+
+        // if ($this->getRequest()->isPost()){
+        //     $formData = $this->getRequest()->getPost();
+        // }
+        if (isset($_GET['year'], $_GET['month'])){
+            print_r($_GET);
+        }
+    }
+
+    
+
+
     
 }
