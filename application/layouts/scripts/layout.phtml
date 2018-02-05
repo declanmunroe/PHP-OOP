@@ -6,11 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel = "stylesheet" href =  "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/style.css'); ?>
-    <?php echo $this->headScript()->headScript()->prependFile('/js/code.js'); ?>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <title>Tables</title>
 </head>
-<body onload="myFunction()">
+<body>
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-12 fixed-height">
@@ -33,6 +32,9 @@
         <br>
         <a href="<?php echo $this->url(array('module'=>'port','controller'=>'report',
                                         'action'=>'ajaxdata'));?>">Ajax Data Dropdown</a>
+        <br>
+        <a href="<?php echo $this->url(array('module'=>'port','controller'=>'report',
+                                        'action'=>'testpostman'));?>">Test Postman</a>
         </div>
         <div class="col-sm-12 col-md-8 col-lg-8">
             <?php echo $this->layout()->content; ?>

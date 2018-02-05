@@ -23,3 +23,24 @@ $('form.ajax').on('submit', function() {
 
      return false;
  });
+
+ function chk()
+        {
+            var year=document.getElementByName('year').value;
+            var month=document.getElementByName('month').value;
+            var dataString='year='+ year + 'month='+ month;
+            $.ajax({
+                type:"post",
+                url: "/port/report/ajaxdata",
+                data:dataString,
+                cache:false,
+                success: function(html) {
+                    $('#msg').html(html);
+                }
+            });
+            return false;
+        }
+
+// $(document).ready(function(){
+//     alert('Hello');
+// });

@@ -1,7 +1,7 @@
 
 <?php
 
-print '<form action="" method="get">';
+print '<form>';
 print '<select name="year">';
   for ($m=1950; $m<=$this->latest_year; $m++) {
     print '<option value="'.$m.'">'.$m.'</option>';
@@ -17,5 +17,51 @@ print '<select name="year">';
 
   <input type="submit">
 </form>
+
+<?php echo $this->year; ?>
+
+
+
+<!-- ajax code that was taken from peopleserver -->
+<!-- <script>
+    $(function() { 
+        $(document).on('submit', "#login", function(e) {
+            e.preventDefault();
+            var block = $("#mybox");
+            var child = block.children();
+            block.css("height", block.height());
+
+            $.ajax({  
+                url: $(this).attr('index'),
+                type: "post",  
+                data: $(this).serialize(),
+                error:function(){
+                    alert("ERROR : CANNOT CONNECT TO SERVER");
+                },
+                success: function(data) {
+                  //alert(data);
+                  child.empty();
+                  child.append(data);
+                  $('#mybox').fadeIn("fast");
+                  block.animate({
+                    height: child.height()
+                  });
+                  $('#mybox').fadeOut(20000);
+                }
+            });
+            return false; 
+        });
+    });
+</script>
+
+<form id="login">
+      <h1>Login</h1>
+      <input type="text" placeholder="Username" required/>
+      <input type="password" placeholder="Password" required/>
+      <button type="submit">Login</button>
+    </form>
+    <div id="mybox">
+      <p class="lead" style="color:red"></p>
+    </div> -->
 
 

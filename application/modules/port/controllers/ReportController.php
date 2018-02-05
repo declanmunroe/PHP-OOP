@@ -81,9 +81,20 @@ class Port_ReportController extends Zend_Controller_Action
         // if ($this->getRequest()->isPost()){
         //     $formData = $this->getRequest()->getPost();
         // }
-        if (isset($_GET['year'], $_GET['month'])){
-            print_r($_GET);
+        if ($this->getRequest()->isPost()) {
+            $formData = $this->getRequest()->getPost();
+            $this->view->year = $formData['year'];
+            $this->view->month = $formData['month'];
+        
+        // if (isset($_POST['year'], $_POST['month'])){
+        //     print_r($_POST);
+        // }
         }
+    }
+
+    public function testpostmanAction()
+    {
+        $this->view->month_array = array("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
     }
 
     
