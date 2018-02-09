@@ -83,6 +83,37 @@ class Intranet_DataController extends Zend_Controller_Action
 
         $this->view->rows = $events->fetchAll($select);
     }
+
+    public function noinvoicesAction()
+    {
+        $this->_helper->layout->setLayout('datalayout');
+
+        $events = new Application_Model_DbIcsData_Events();
+        $select = $events->select();
+        $select->setIntegrityCheck(false);
+
+        $select->from(array('t1' => 'jos_eb_registrants'), 
+                      array(
+                          't1.id', 
+                          't1.first_name', 
+                          't1.last_name',
+                          't2.title',
+                          't1.sin'
+                         ))
+                ->joinInner(array('t2'=>'jos_eb_events'), 't2.id=t1.event_id')
+                ->where('t1.sin = "SIN000000"')
+                ->group(array(
+                    't2.id'
+                ));
+                // ->limit(100);
+
+                echo $select;
+                
+                
+
+
+        $this->view->rows = $events->fetchAll($select);
+    }
 }
 
 ?>

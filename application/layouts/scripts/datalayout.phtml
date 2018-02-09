@@ -1,2 +1,15 @@
-New layout
+<style>
+    th {
+    text-align: left;
+    background-color: blue;
+    color: white;
+}
+
+th, td {
+    border-bottom: 1px solid #ddd;
+}
+
+tr:nth-child(even) {background: #CCC}
+tr:nth-child(odd) {background: #FFF}
+</style>
 <?php echo $this->layout()->content; ?>

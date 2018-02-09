@@ -1,0 +1,25 @@
+<?php
+echo '<table class="noinvoices" id="tab11" width=100%>
+<tr id = "head">
+<th>Event ID</th>
+<th>First Name</th>
+<th>Last Name</th>
+<th>Event Title</th>
+<th>Sin</th>
+</tr>
+';
+
+foreach ($this->rows as $event) {
+
+
+    echo '<tr class ="odd" >
+        <td>' . $event->id . '</td>
+        <td>' . $event->first_name . '</td>
+        <td>' . $event->last_name . '</td>
+        <td>' . $event->title . '</td>
+        <td>' . $event->sin . '</td>
+        </tr>';
+    }
+
+echo '</tr></table>';
+?>
