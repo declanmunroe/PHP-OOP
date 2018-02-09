@@ -97,6 +97,27 @@ class Port_ReportController extends Zend_Controller_Action
         $this->view->month_array = array("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
     }
 
+    public function tickboxAction()
+    {
+        $form = new Application_Form_RegistrationTickbox();
+        $form->submit->setLabel('Add');
+        $this->view->form = $form;
+
+        if ($this->getRequest()->isPost()){
+            $formData = $this->getRequest()->getPost();
+            if ($form->isValid($formData)) {
+                $contact = $form->getValue('contact');
+                $photo = $form->getValue('photo');
+                $add = new Application_Model_Checkbox_Checkboxform();
+                $add->addCheckboxinfo($contact, $photo);
+
+                $this->_helper->redirector('tickbox');
+            } else {
+                $form->populate($formData);
+            }
+        }
+    }
+
     
 
 

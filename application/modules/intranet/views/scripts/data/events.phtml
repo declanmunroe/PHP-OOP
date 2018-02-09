@@ -1,0 +1,70 @@
+<?php
+echo '<table class="courses" id="tab11" width=100%>
+    <tr id = "head">
+    <th>ID</th>
+    <th>Date</th>
+    <th>Training Sesion</th>
+    <th>Registered</th>
+    <th>Cap</th>
+    <th>Disc</th>
+    <th>Category</th>
+	<th>Income</th>
+	<th>CPD</th>
+    </tr>
+';
+$i=0;
+foreach($this->rows as $event) {
+    $i++;
+    $F='';
+    $C = $event->event_capacity;
+
+    if ($C <= $event->total and $C != 0 )
+        $F ='Full';
+    else
+        $F = $event->event_capacity ;
+
+    if ($F == '0')
+        $F = '-';
+
+    $CAT = $event->ID;
+    $CAT = str_replace('1','TRA',$CAT) ;
+    $CAT = str_replace('2','ICS',$CAT) ;
+    $CAT = str_replace('3','EXT',$CAT) ;
+    $CAT = str_replace('4','DPO',$CAT) ;
+    $CAT = str_replace('5','HIS',$CAT) ;
+    $CAT = str_replace('6','SKL',$CAT) ;
+    $CAT = str_replace('7','ISA',$CAT) ;
+    $CAT = str_replace('8','BAA',$CAT) ;
+
+    if ($i % 2) {   // is odd
+        echo '<tr class ="odd" >
+        <td>'.$this->escape($event->id).'</td>
+        <td><b>'.strftime("%Y-%m-%d", strtotime($this->escape($event->event_date))).'</td>
+        <td>'.$this->escape($event->title).'</td>
+        <td>'.$this->escape($event->total).'</td>
+        <td>'.$F.'</td>
+        <td>'.$this->escape($event->disc).'</td>
+        <td>'.$CAT.'</td>
+        <td>'.$this->escape($event->Income).'</td>
+        <td>'.$this->escape($event->points).'</td>
+        </tr>';
+    } else {
+        echo '<tr class ="even" >
+        <td>'.$this->escape($event->id).'</td>
+        <td><b>'.strftime("%Y-%m-%d", strtotime($this->escape($event->event_date))).'</td>
+        <td>'.$this->escape($event->title).'</td>
+        <td>'.$this->escape($event->total).'</td>
+        <td>'.$F.'</td>
+        <td>'.$this->escape($event->disc).'</td>
+        <td>'.$CAT.'</td>
+        <td>'.$this->escape($event->Income).'</td>
+        <td>'.$this->escape($event->points).'</td>
+        </tr>';
+    }
+}
+
+
+echo '</tr></table>';
+?>
+
+    
