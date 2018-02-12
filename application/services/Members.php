@@ -5,7 +5,7 @@ class Application_Service_Members
     
     public static function all() 
     {
-        $members = [
+        $billy = [
             
             
             ['FirstName'=>'Declan', 'LastName'=>'Munroe', 'Age'=>25],
@@ -17,7 +17,7 @@ class Application_Service_Members
             ['FirstName'=>'Peader', 'LastName'=>'Farrel', 'Age'=>72]
         ];
 
-        return $members;
+        return $billy;
     }
 
   
