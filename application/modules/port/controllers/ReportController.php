@@ -118,6 +118,29 @@ class Port_ReportController extends Zend_Controller_Action
         }
     }
 
+    public function practiceformAction()
+    {
+        $form = new Application_Form_PracticeForm();
+        $form->submit->setLabel('Submit Now');
+        $this->view->form = $form;
+
+        if ($this->getRequest()->isPost()){
+            $formData = $this->getRequest()->getPost();
+            if ($form->isValid($formData)) {
+                $first = $form->getValue('first_name');
+                $last = $form->getValue('last_name');
+                $contact = $form->getValue('share_contact_info');
+                $photo = $form->getValue('allow_photos');
+                $add = new Application_Model_PracticeForm_FormPractice();
+                $add->addForminfo($first, $last, $contact, $photo);
+
+                $this->_helper->redirector('practiceform');
+            } else {
+                $form->populate($formData);
+            }
+        }
+    }
+
     
 
 
