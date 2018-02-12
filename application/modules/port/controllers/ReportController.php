@@ -141,6 +141,13 @@ class Port_ReportController extends Zend_Controller_Action
         }
     }
 
+    public function showresultsAction()
+    {
+        $service = new Application_Service_ShowResults();
+        
+        $this->view->rows = $service->showResults();
+    }
+
     
 
 

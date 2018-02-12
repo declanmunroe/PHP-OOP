@@ -1,0 +1,13 @@
+<table>
+<tr>
+    <th>Contact</th>
+    <th>Photo</th>
+    <th>&nbsp;</th>
+</tr>
+<?php foreach($this->rows as $result) : ?>
+<tr>
+    <td><?php echo $this->escape($result->contact);?></td>
+    <td><?php echo $this->escape($result->photo);?></td>
+</tr>
+<?php endforeach; ?>
+</table>
