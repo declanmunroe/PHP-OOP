@@ -12,34 +12,28 @@
 <body>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-12 fixed-height">
-            <h2>Header</h2>
+        <div class="col-sm-12 fixed-height links">
+            <h2 class="title">DeclanServer</h2>
+            <a href="<?php echo $this->url(array('module'=>'port','controller'=>'report',
+                'action'=>'engagement'));?>">Show Table</a>
+            <a href="<?php echo $this->url(array('module'=>'port','controller'=>'report',
+                'action'=>'other'));?>">Other Page</a>
+            <a href="<?php echo $this->url(array('module'=>'port','controller'=>'report',
+                'action'=>'dateyear'));?>">Date Year Dropdown</a>
+            <a href="<?php echo $this->url(array('module'=>'port','controller'=>'report',
+                'action'=>'ajaxdata'));?>">Ajax Data Dropdown</a>
+            <a href="<?php echo $this->url(array('module'=>'port','controller'=>'report',
+                'action'=>'testpostman'));?>">Test Postman</a>
+            <a href="<?php echo $this->url(array('module'=>'port','controller'=>'report',
+                'action'=>'tickbox'));?>">Tickbox</a>
+            <a href="<?php echo $this->url(array('module'=>'intranet','controller'=>'data',
+                'action'=>'events'));?>">Intranet Events</a>
+            <a href="<?php echo $this->url(array('module'=>'default','controller'=>'event',
+                'action'=>'index'));?>">Events</a>
         </div>
     </div>
-</div>
-
-<div class="container-fluid">
     <div class="row">
-        <div class="col-sm-12 col-md-4 col-lg-4 links">
-        <a href="<?php echo $this->url(array('module'=>'port','controller'=>'report',
-                                        'action'=>'engagement'));?>">Show Table</a>
-        <br>
-        <a href="<?php echo $this->url(array('module'=>'port','controller'=>'report',
-                                        'action'=>'other'));?>">Other Page</a>
-        <br>
-        <a href="<?php echo $this->url(array('module'=>'port','controller'=>'report',
-                                        'action'=>'dateyear'));?>">Date Year Dropdown</a>
-        <br>
-        <a href="<?php echo $this->url(array('module'=>'port','controller'=>'report',
-                                        'action'=>'ajaxdata'));?>">Ajax Data Dropdown</a>
-        <br>
-        <a href="<?php echo $this->url(array('module'=>'port','controller'=>'report',
-                                        'action'=>'testpostman'));?>">Test Postman</a>
-        <br>
-        <a href="<?php echo $this->url(array('module'=>'port','controller'=>'report',
-                                        'action'=>'tickbox'));?>">Tickbox</a>
-        </div>
-        <div class="col-sm-12 col-md-8 col-lg-8">
+        <div class="col-sm-12 content">
             <?php echo $this->layout()->content; ?>
         </div>
     </div>

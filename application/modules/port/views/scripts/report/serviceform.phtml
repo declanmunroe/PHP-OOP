@@ -1,0 +1,15 @@
+<form action="/port/report/serviceform" method="post">
+
+<?php for($i = 0; $i < 3; $i++) : ?>
+    <input type="text" name="first_name[<?php echo $i; ?>]" value="">
+    <input type="text" name="last_name[<?php echo $i; ?>]" value="">
+    <input type="text" name="email[<?php echo $i; ?>]" value="">
+    <br />
+<?php endfor; ?>
+          
+  <!-- Booking email:<br>
+  <input type="text" name="booking_email" value="">
+  <br>
+  <br><br> -->
+  <input type="submit" value="Submit">
+</form>

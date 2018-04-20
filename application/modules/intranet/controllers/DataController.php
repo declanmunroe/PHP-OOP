@@ -10,7 +10,7 @@ class Intranet_DataController extends Zend_Controller_Action
 
     public function eventsAction()
     {
-        $this->_helper->layout->setLayout('datalayout');
+//        $this->_helper->layout->setLayout('datalayout');
 
         $events = new Application_Model_DbIcsData_Events();
         $select = $events->select();

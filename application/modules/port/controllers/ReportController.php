@@ -146,7 +146,24 @@ class Port_ReportController extends Zend_Controller_Action
         $this->view->members = Application_Service_ShowResults::showResults();
     }
 
-    
+    public function serviceformAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            $formData = $this->getRequest()->getPost();
+
+            // $f_name = $formData ['first_name'];
+            // $l_name = $formData ['last_name'];
+            // $name_email = $formData ['email'];
+            // $b_f_n = $formData ['booking_first_name'];
+            // $b_l_n = $formData ['booking_last_name'];
+            // $b_email = $formData ['booking_email'];
+            // // $add = new Application_Service_ServiceForm();
+            // $add = Application_Service_ServiceForm::submitToTable($f_name, $l_name, $name_email, $b_f_n, $b_l_n, $b_email);
+
+            print_r($formData);
+            // echo $formData['firstname'];
+        }
+    }
 
 
     
