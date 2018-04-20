@@ -42,7 +42,7 @@ class Application_Service_ShowEventsList
             'u.email',
             'u.booking_first_name'
         ))
-            ->where('u.event_id = ?',$event_id)->limit(20);
+            ->where('u.event_id = ?',$event_id)->limit(50);
 
         //  die($select->assemble());
 
@@ -61,6 +61,24 @@ class Application_Service_ShowEventsList
             'booking_first_name' => 'SureSkills'
         );
         $db->insert($data);
+    }
+
+    public function insertMultipleNewRegistrant($event_id, $newRegistrants, $booked_by)
+    {
+        $db = new Zend_Db_Table('jos_eb_registrants');
+
+        foreach($newRegistrants as $registrant) {
+
+            $data = array(
+                'event_id' => $event_id,
+                'first_name' => $registrant->name_f,
+                'last_name' => $registrant->name_l,
+                'email' => $registrant->email,
+                'booking_first_name' => $booked_by
+            );
+            die(print_r($data));
+//            $db->insert($data);
+        }
     }
 }
 
