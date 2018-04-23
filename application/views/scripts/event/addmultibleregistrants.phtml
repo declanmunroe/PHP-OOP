@@ -40,6 +40,7 @@
         <th>Last Name</th>
         <th>Email</th>
         <th>Booked By</th>
+        <th>Edit</th>
     </tr>
 
     </thead>
@@ -54,6 +55,7 @@
             <td><?php echo $reg->last_name;?></td>
             <td><?php echo $reg->email; ?></td>
             <td><?php echo $reg->booked_by; ?></td>
+            <td><a href="/public/event/editregistrant/<?php echo $reg->id; ?>">Edit</a></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
