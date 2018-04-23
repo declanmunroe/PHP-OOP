@@ -14,23 +14,12 @@ class Application_Service_EventRegistrant {
 
     public function __construct($name_f,$name_l, $email) {
 
+        $this->name_f = $name_f;
 
+        $this->name_l = $name_l;
 
-        foreach($name_f as $firstName) {
-            $this->name_f = $firstName;
-        }
-
-        foreach($name_l as $lastName) {
-            $this->name_l = $lastName;
-        }
-
-        foreach($email as $singleEmail) {
-            $this->email = $singleEmail;
-        }
-
-
+        $this->email = $email;
     }
-
 }
 
 ?>

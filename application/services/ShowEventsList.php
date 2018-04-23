@@ -36,15 +36,47 @@ class Application_Service_ShowEventsList
 
         $query = $select->from(array('u' => 'jos_eb_registrants'), array(
 
+            'u.id',
             'u.event_id',
             'u.first_name',
             'u.last_name',
             'u.email',
-            'u.booking_first_name'
+            'u.booked_by'
         ))
-            ->where('u.event_id = ?',$event_id)->limit(50);
+            ->join(array(
+                't2' => 'jos_eb_events'
+            ), 't2.event_id=u.event_id', array(
+                't2.title'
+            ))
+            ->where('u.event_id = ?',$event_id)->limit(50)
+            ->order('u.id DESC');
 
         //  die($select->assemble());
+
+        return $dbUserTable->fetchAll($query);
+    }
+
+    public function getallregistrants()
+    {
+        $dbUserTable = new Zend_Db_Table('jos_eb_registrants');
+
+        $select = $dbUserTable->select()->setIntegrityCheck(false);
+
+        $query = $select->from(array('t1' => 'jos_eb_registrants'),
+            array(
+                't1.id',
+                't1.event_id',
+                't1.first_name',
+                't1.last_name',
+                't1.email',
+                't1.booked_by'
+            ))
+            ->join(array(
+                't2' => 'jos_eb_events'
+            ), 't2.event_id=t1.event_id', array(
+                't2.title'
+            ))
+            ->order('t1.id DESC');
 
         return $dbUserTable->fetchAll($query);
     }
@@ -58,7 +90,7 @@ class Application_Service_ShowEventsList
             'first_name' => $firstName,
             'last_name' => $lastName,
             'email' => $email,
-            'booking_first_name' => 'SureSkills'
+            'booked_by' => 'SureSkills'
         );
         $db->insert($data);
     }
@@ -74,10 +106,10 @@ class Application_Service_ShowEventsList
                 'first_name' => $registrant->name_f,
                 'last_name' => $registrant->name_l,
                 'email' => $registrant->email,
-                'booking_first_name' => $booked_by
+                'booked_by' => $booked_by
             );
-            die(print_r($data));
-//            $db->insert($data);
+//            die(print_r($data));
+            $db->insert($data);
         }
     }
 }

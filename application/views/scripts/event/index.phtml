@@ -8,7 +8,7 @@
 
     <?php foreach ($this->listings as $listing):?>
 
-        <option value="<?php echo $listing->id; ?>"><?php echo $listing->title; ?></option>
+        <option value="<?php echo $listing->event_id; ?>"><?php echo $listing->title; ?></option>
 
     <?php endforeach; ?>
 
@@ -39,7 +39,7 @@
             <td><?php echo $reg->first_name; ?></td>
             <td><?php echo $reg->last_name;?></td>
             <td><?php echo $reg->email; ?></td>
-            <td><?php echo $reg->booking_first_name; ?></td>
+            <td><?php echo $reg->booked_by; ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>

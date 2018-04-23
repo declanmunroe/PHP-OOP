@@ -54,26 +54,27 @@ class EventController extends Zend_Controller_Action
 
             $eventRegistrants = new Application_Service_ShowEventsList();
 
-            $newRegistrants[] = new Application_Service_EventRegistrant($first_name, $last_name, $email);
+//            foreach ($email as $key => $value)
+//            {
+//                $emailvalues[] = $value;
+//            }
+            $entries = array_filter($email);
+
+            $count = sizeof($entries);
+
+            for ($i=0; $i<$count; $i++)
+            {
+                $newRegistrants[] = new Application_Service_EventRegistrant($first_name[$i], $last_name[$i], $email[$i]);
+            }
 
             $eventRegistrants->insertMultipleNewRegistrant($event_id, $newRegistrants, $booked_by);
 
             $this->view->registrants = $eventRegistrants->getRegistrantsForEvent($event_id);
-
-//            $first_name = $formData['first_name'];
-//            $last_name = $formData['last_name'];
-//            $email = $formData['email'];
-//            $booked_by = $formData['booked_by'];
-//
-//            $registrants = [];
-//
-//            die(print_r($first_name));
-
-//            for ($i = 0; $i < $count; $i++) {
-//
-//                echo "<p>{$formData ['first_name'][$i]} - {$formData['last_name'][$i]} - {$formData['email'][$i]}";
-//
-//            }
+        }
+        else
+        {
+            $eventRegistrants = new Application_Service_ShowEventsList();
+            $this->view->registrants = $eventRegistrants->getallregistrants();
         }
     }
 
