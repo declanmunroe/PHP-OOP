@@ -1,7 +1,7 @@
 <h4>Are you sure you want to delete registrant id number <?php echo $this->registrant_id; ?></h4><br>
 <?php foreach ($this->registrantdetails as $details) : ?>
 
-<form action="/public/event/deleteregistrant" method="post">
+<form action="/event/deleteregistrant" method="post">
 
         <input type="hidden" name="id" value="<?php echo $details['id']; ?>">
         <label for="fn">First Name :</label>

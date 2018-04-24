@@ -1,5 +1,5 @@
 <br>
-<form action="/public/event/addmultibleregistrants" method="post" id="regform" >
+<form action="/event/addmultibleregistrants" method="post" id="regform" >
 
     <select id="selectEvent" name="whatselected">
 
@@ -56,8 +56,8 @@
             <td><?php echo $reg->last_name;?></td>
             <td><?php echo $reg->email; ?></td>
             <td><?php echo $reg->booked_by; ?></td>
-            <td><a href="/public/event/editregistrant/id/<?php echo $reg->id; ?>">Edit</a></td>
-            <td><a href="/public/event/deleteregistrant/id/<?php echo $reg->id; ?>">Delete</a></td>
+            <td><a href="/event/editregistrant/id/<?php echo $reg->id; ?>">Edit</a></td>
+            <td><a href="/event/deleteregistrant/id/<?php echo $reg->id; ?>">Delete</a></td>
         </tr>
     <?php endforeach; ?>
     </tbody>

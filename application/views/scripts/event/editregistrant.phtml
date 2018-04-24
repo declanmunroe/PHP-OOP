@@ -2,7 +2,7 @@
 //die(var_dump($this->registrantdetails));
 ?>
 <?php foreach ($this->registrantdetails as $details) : ?>
-<form action="/public/event/editregistrant" method="post" id="regform" >
+<form action="/event/editregistrant" method="post" id="regform" >
 
         <input type="hidden" name="id" value="<?php echo $details['id']; ?>">
         <label for="fn">First Name :</label>
