@@ -80,7 +80,70 @@ class EventController extends Zend_Controller_Action
 
     public function editregistrantAction()
     {
+        $registrant_id = (int) $this->getParam('id', 0);
+        $registrant = new Application_Service_ShowEventsList();
 
+        $this->view->registrantdetails = $registrant->getRegistrantDetails($registrant_id);
+
+        if ($this->getRequest()->isPost()) {
+            $formData = $this->getRequest()->getPost();
+            $id = $formData['id'];
+            $first_name = $formData['first_name'];
+            $last_name = $formData['last_name'];
+            $email = $formData['email'];
+
+
+            $updateRegistrant = new Application_Service_ShowEventsList();
+            $updateRegistrant->updateRegistrant($id, $first_name, $last_name, $email, $registrant_id);
+
+            $urlOptions = array(
+                'controller' => 'event',
+                'action' => 'addmultibleregistrants',
+                'module' => 'default'
+            );
+
+            $this->_helper->redirector->gotoRoute($urlOptions);
+        }
     }
 
+    public function deleteregistrantAction()
+    {
+        $this->view->registrant_id = $registrant_id = (int) $this->getParam('id', 0);
+
+        $registrant = new Application_Service_ShowEventsList();
+
+        $this->view->registrantdetails = $registrant->getRegistrantDetails($registrant_id);
+
+        if ($this->getRequest()->isPost()) {
+            $formData = $this->getRequest()->getPost();
+            $id = $formData['id'];
+            $answer = $formData['decision'];
+//            die($id);
+
+            if ($answer == "yes")
+            {
+                $deleteRegistrant = new Application_Service_ShowEventsList();
+                $deleteRegistrant->deleteRegistrant($id);
+
+                $urlOptions = array(
+                    'controller' => 'event',
+                    'action' => 'addmultibleregistrants',
+                    'module' => 'default'
+                );
+
+                $this->_helper->redirector->gotoRoute($urlOptions);
+            }
+            else if ($answer == "no")
+            {
+                $urlOptions = array(
+                    'controller' => 'event',
+                    'action' => 'addmultibleregistrants',
+                    'module' => 'default'
+                );
+
+                $this->_helper->redirector->gotoRoute($urlOptions);
+            }
+        }
+
+    }
 }

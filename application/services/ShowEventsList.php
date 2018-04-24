@@ -26,6 +26,54 @@ class Application_Service_ShowEventsList
 //        return $rows;
 //    }
 
+    public function getRegistrantDetails($id)
+    {
+        $dbUserTable = new Zend_Db_Table('jos_eb_registrants');
+
+        $select = $dbUserTable->select()->setIntegrityCheck(false);
+
+        $query = $select->from(array('u' => 'jos_eb_registrants'), array(
+
+            'u.id',
+            'u.first_name',
+            'u.last_name',
+            'u.email'
+        ))
+            ->where('u.id = ?',$id);
+
+
+        //  die($select->assemble());
+
+        return $dbUserTable->fetchAll($query);
+    }
+
+    public function updateRegistrant($id, $firstName, $lastName, $email, $registrant_id)
+    {
+        $db = new Zend_Db_Table('jos_eb_registrants');
+
+        $data = array(
+            'id' => $id,
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'email' => $email
+        );
+
+        $db->update($data, "id = " . $registrant_id);
+    }
+
+    public function deleteRegistrant($id)
+    {
+        $db = new Zend_Db_Table('jos_eb_registrants');
+
+        $row = $db->fetchRow('id = ' . $id);
+
+        $row->delete();
+
+//        $data = array('id' => $id);
+//
+//        $db->delete($data, 'id = ' . $registrant_id);
+    }
+
     public function getRegistrantsForEvent($event_id)
     {
         $dbUserTable = new Zend_Db_Table('jos_eb_registrants');

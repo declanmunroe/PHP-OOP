@@ -1,52 +1,21 @@
+<?php
+//die(var_dump($this->registrantdetails));
+?>
+<?php foreach ($this->registrantdetails as $details) : ?>
 <form action="/public/event/editregistrant" method="post" id="regform" >
 
-
-
+        <input type="hidden" name="id" value="<?php echo $details['id']; ?>">
         <label for="fn">First Name :</label>
-        <input   id="ln" type="text" name="first_name" >
+        <input   id="ln" type="text" name="first_name" value="<?php echo $details['first_name']; ?>" >
     <br>
-        <label for="fn_<?php echo $i; ?>">Last Name :</label>
-        <input   id="ln" type="text" name="last_name" >
+        <label for="fn">Last Name :</label>
+        <input   id="ln" type="text" name="last_name" value="<?php echo $details['last_name']; ?>">
     <br>
         <label for="email">Email :</label>
-        <input   id="email" type="text" name="email" ><br>
+        <input   id="email" type="text" name="email" value="<?php echo $details['email']; ?>"><br>
 
 
-    <input type="submit" value = "Submit">
+    <input type="submit" value = "Update">
 
 </form>
-
-public function editeventregistrantAction(){
-
-$this->view->pageTitle = "Edit Registrant";
-$this->view->form = $form = new Admin_Form_EventRegistrant();
-
-$this->view->registrant_id = $registrant_id = (int) $this->getParam('registrant_id', 0);
-$this->view->payment_method=$this->getParam('payment_method', "unknown payment");
-$registrant = Registrant::find($registrant_id);
-$form->populate($registrant->toArray());
-
-if ($this->getRequest()->isPost()) {
-$formData = $this->getRequest()->getPost();
-if ($form->isValid($formData)) {
-
-$this->_dbEventRegistrantsTable->update($form->getValues(), "id = " . (int) $registrant_id);
-
-$urlOptions = array(
-'controller' => 'event',
-'action' => 'editeventregistrant',
-'module' => 'admin',
-'registrant_id' => $registrant_id
-);
-
-$this->_helper->redirector->gotoRoute($urlOptions);
-} else {
-
-print_r($form->getErrors());
-
-die("invalid form");
-}
-}
-
-
-}
+<?php endforeach; ?>

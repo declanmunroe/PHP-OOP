@@ -1,0 +1,26 @@
+<h4>Are you sure you want to delete registrant id number <?php echo $this->registrant_id; ?></h4><br>
+<?php foreach ($this->registrantdetails as $details) : ?>
+
+<form action="/public/event/deleteregistrant" method="post">
+
+        <input type="hidden" name="id" value="<?php echo $details['id']; ?>">
+        <label for="fn">First Name :</label>
+        <input   id="ln" type="text" name="first_name" value="<?php echo $details['first_name']; ?>" disabled >
+        <br>
+        <label for="fn">Last Name :</label>
+        <input   id="ln" type="text" name="last_name" value="<?php echo $details['last_name']; ?>" disabled>
+        <br>
+        <label for="email">Email :</label>
+        <input   id="email" type="text" name="email" value="<?php echo $details['email']; ?>" disabled><br>
+    <input type="checkbox" name="decision" value="yes">Yes<br>
+    <input type="checkbox" name="decision" value="no">No<br><br>
+    <input type="submit" value="Confirm">
+<?php endforeach; ?>
+
+<!--<form action="/public/event/deleteregistrant" method="post">-->
+<!--    <input type="hidden" name="id" value="--><?php //echo $this->registrant_id; ?><!--">-->
+<!--    <input type="checkbox" name="decision" value="yes">Yes<br>-->
+<!--    <input type="checkbox" name="decision" value="no">No<br><br>-->
+<!---->
+<!--    <input type="submit" value="Confirm">-->
+<!--</form>-->
