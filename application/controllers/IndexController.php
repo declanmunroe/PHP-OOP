@@ -6,11 +6,18 @@ class IndexController extends Zend_Controller_Action
     public function init()
     {
         /* Initialize action controller here */
+        $auth = Zend_Auth::getInstance();
+
+        if (!$auth->hasIdentity()) {
+            $urlOptions = array('controller' => 'login', 'action' => 'index', 'module' => 'default');
+
+            $this->_helper->redirector->gotoRoute($urlOptions);
+        }
     }
 
     public function indexAction()
     {
-        // action body
+        $this->redirect('/event/index');
     }
 
     public function demoAction()
