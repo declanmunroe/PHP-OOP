@@ -14,12 +14,12 @@ class Application_Form_LoginAdmin extends Zend_Form
             ->addValidator('NotEmpty')
             ->addValidator('EmailAddress', true);
 
-//        $pw = new Zend_Form_Element_Password('password');
-//        $pw->setLabel('password')
-//            ->setRequired(true)
-//            ->addFilter('StripTags')
-//            ->addFilter('StringTrim')
-//            ->addValidator('NotEmpty');
+    //    $pw = new Zend_Form_Element_Password('password');
+    //    $pw->setLabel('password')
+    //        ->setRequired(true)
+    //        ->addFilter('StripTags')
+    //        ->addFilter('StringTrim')
+    //        ->addValidator('NotEmpty');
 
         $submit = new Zend_Form_Element_Submit('submit');
         //$submit->removeDecorator('label');

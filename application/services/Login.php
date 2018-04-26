@@ -2,7 +2,7 @@
 class Application_Service_Login
 {
 
-    public function loginAdmin(Application_Form_LoginAdmin $form)
+    public function loginAdmin($formData)
     {
         $dbUserTable = new Zend_Db_Table('ps_admin');
 
@@ -13,8 +13,8 @@ class Application_Service_Login
             'u.admin_id',
             'u.username'
         ))
-            ->where('u.username = ?',$form->getValue('username'));
+            ->where('u.username = ?',$formData);
 
-        return $dbUserTable->fetchAll($query);
+        return $dbUserTable->fetchRow($query);
     }
 }

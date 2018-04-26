@@ -12,19 +12,18 @@ class LoginController extends Zend_Controller_Action
     {
         $this->_helper->layout->disableLayout();
         $form = new Application_Form_LoginAdmin();
+        // die($form);
 
         if ($this->getRequest()->isPost()) {
             $formData = $this->getRequest()->getPost();
-            $username = $formData['username'];
-//            die($username);
 
             if ($form->isValid($formData)) {
 
                 $service = new Application_Service_Login();
-                $result = $service->loginAdmin($form);
-//                die(print_r($result));
+                $result = $service->loginAdmin($formData);
+                // die($result['username']);
 
-                if ($result == $username) {
+                if ($result['username'] == $formData['username']) {
                     $urlOptions = array(
                         'controller' => 'event',
                         'action' => 'addmultibleregistrants',
