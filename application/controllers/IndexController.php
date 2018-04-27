@@ -9,7 +9,7 @@ class IndexController extends Zend_Controller_Action
         $auth = Zend_Auth::getInstance();
 
         if (!$auth->hasIdentity()) {
-            $urlOptions = array('controller' => 'login', 'action' => 'index', 'module' => 'default');
+            $urlOptions = array('controller' => 'authentication', 'action' => 'login', 'module' => 'default');
 
             $this->_helper->redirector->gotoRoute($urlOptions);
         }
