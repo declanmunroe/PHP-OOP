@@ -40,6 +40,7 @@
         <th>Last Name</th>
         <th>Email</th>
         <th>Booked By</th>
+        <th>Case Example</th>
         <th>Edit</th>
         <th>Delete</th>
     </tr>
@@ -56,6 +57,7 @@
             <td><?php echo $reg->last_name;?></td>
             <td><?php echo $reg->email; ?></td>
             <td><?php echo $reg->booked_by; ?></td>
+            <td><?php echo $reg->case_example; ?></td>
             <td><a href="/event/editregistrant/id/<?php echo $reg->id; ?>">Edit</a></td>
             <td><a href="/event/deleteregistrant/id/<?php echo $reg->id; ?>">Delete</a></td>
         </tr>

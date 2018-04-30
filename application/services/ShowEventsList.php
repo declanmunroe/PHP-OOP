@@ -89,7 +89,8 @@ class Application_Service_ShowEventsList
             'u.first_name',
             'u.last_name',
             'u.email',
-            'u.booked_by'
+            'u.booked_by',
+            new Zend_Db_Expr('case when u.event_id >= 20 then "The quantity is greater" else "The quantity is less" end as case_example')
         ))
             ->join(array(
                 't2' => 'jos_eb_events'
@@ -117,7 +118,8 @@ class Application_Service_ShowEventsList
                 't1.first_name',
                 't1.last_name',
                 't1.email',
-                't1.booked_by'
+                't1.booked_by',
+                new Zend_Db_Expr('case when t1.event_id >= 20 then "The quantity is greater" else "The quantity is less" end as case_example')
             ))
             ->join(array(
                 't2' => 'jos_eb_events'
