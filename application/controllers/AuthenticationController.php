@@ -90,4 +90,16 @@ class AuthenticationController extends Zend_Controller_Action
 
         return $authAdapter;
     }
+
+    public function hashAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $email = 'declan.munroe@ics.ie';
+
+        $hashemail = new Application_Service_Tokens();
+        $result = $hashemail->moodlehash($email);
+        die(var_dump($result));
+    }
 }
