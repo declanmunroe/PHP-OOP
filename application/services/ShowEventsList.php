@@ -162,6 +162,20 @@ class Application_Service_ShowEventsList
             $db->insert($data);
         }
     }
+
+    public function insertPeopleDatatable($first, $last, $email)
+    {
+        $db = new Zend_Db_Table('data_table');
+
+        $data = array(
+            'f_name' => $first,
+            'l_name' => $last,
+            'email' => $email
+        );
+//            die(print_r($data));
+        $db->insert($data);
+        
+    }
 }
 
 ?>

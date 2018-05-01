@@ -153,4 +153,20 @@ class EventController extends Zend_Controller_Action
         }
 
     }
+
+    public function datatableAction()
+    {
+        // $people = new Application_Service_ShowEventsList();
+
+        // for ($i=1; $i<2500; $i++)
+        // {
+        //     $people->insertPeopleDatatable("First name_[$i]", "Last name_[$i]", "Email_[$i]");
+        // }
+        // script to populate database with 2500 rows
+
+        $db = new Zend_Db_Table('data_table');
+        
+        $this->view->rows = $db->fetchAll();
+        //die(print_r($rows));
+    }
 }
