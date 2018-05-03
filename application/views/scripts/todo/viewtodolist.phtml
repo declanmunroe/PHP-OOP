@@ -1,0 +1,33 @@
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+<script type="text/javascript" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+    $.ajax({
+        'url': "http://zendcode.localhost/todo.json",
+        'method': "GET",
+        'contentType': 'application/json'
+    }).done( function(data) {
+        $('#datatable').dataTable( {
+            "aaData": data,
+            "columns": [
+                { "data": "id" },
+                { "data": "task_for" },
+                { "data": "task_details" },
+                { "data": "complete_on" }
+            ]
+        })
+    })
+</script>
+
+<div style="width:500px; border:1px solid black;">
+    <table id="datatable">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>First</th>
+            <th>Last</th>
+            <th>Email</th>
+        </tr>
+        </thead>
+    </table>
+</div>
