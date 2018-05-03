@@ -40,4 +40,14 @@ class TodoController extends Zend_Controller_Action
     {
 
     }
+
+    public function loopjsonAction()
+    {
+
+    }
+
+    public function myfirstapiAction()
+    {
+
+    }
 }

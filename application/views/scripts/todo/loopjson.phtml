@@ -1,0 +1,8 @@
+<?php
+$jsonfile = file_get_contents('todo.json');
+$array = json_decode($jsonfile, true);
+foreach ($array as $content)
+{
+    echo $content['task_for'].'<br>';
+}
+?>

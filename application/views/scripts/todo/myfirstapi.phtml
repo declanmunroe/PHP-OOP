@@ -1,0 +1,14 @@
+<?php if (!empty($_GET['search']))
+{
+    $api = "http://zendcode.localhost/todo.json";
+
+    $json = file_get_contents($api);
+    $json_array = json_decode($json, true);
+    $search = $json_array['task_for'];
+}
+?>
+<form action="">
+    <label for="search">Search</label>
+    <input id="search" type="text" name="search"><br><br>
+    <input type="submit" value="Search">
+</form>
