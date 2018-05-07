@@ -36,6 +36,22 @@ class IndexController extends Zend_Controller_Action
             $this->view->month = $formData['month'];
         }
     }
+    
+    public function diceAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        
+        $dice1 = array('0' => '1', '1' => '2', '2' => '3', '3' => '4', '4' => '5', '5' => '6');
+        $dice2 = array('0' => '1', '1' => '2', '2' => '3', '3' => '4', '4' => '5', '5' => '6');
+        
+        for ($i=0; $i<6; $i++){
+            foreach ($dice1 as $key => $value) {
+            echo $value.",".$dice2[$i].'<br>';
+        }
+        echo '<br>';
+        }
+    }
 
 
 }
