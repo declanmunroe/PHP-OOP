@@ -1,0 +1,29 @@
+<?php
+$jsonfile = file_get_contents('todo.json');
+$array = json_decode($jsonfile, true);
+?>
+
+<table class="table table-striped table-bordered table-hover display compact">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th></th>
+        <th>Task For</th>
+        <th>Task Details</th>
+        <th>Completion Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php $img_link; ?>
+    <?php foreach ($array as $content) : ?>
+        <? $img_link = 'http://zendcode.localhost/img/'.$content['pic_url']; ?>
+        <tr>
+            <td><?php echo $content['id']; ?></td>
+            <td><img src="<?= $img_link ?>" class="center-block img-responsive" width="100px" height="100px"/></td>
+            <td><?php echo $content['task_for']; ?></td>
+            <td><?php echo $content['task_details']; ?></td>
+            <td><?php echo $content['complete_on']; ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
