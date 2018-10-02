@@ -24,7 +24,7 @@ class TestcurlController extends Zend_Controller_Action
     
     public function processcurlAction() {
         
-        $array_two = array('job' => 'Computers');
+        $array_two = array('job' => 'Curl wizzard');
         
         $formData = $this->getRequest()->getPost();
         
@@ -35,18 +35,32 @@ class TestcurlController extends Zend_Controller_Action
     private function curldata($data) {
         $url = 'http://zendcode.localhost/testcurl/processcurl';
         
+        // Initialize curl
         $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($curl, CURLOPT_FAILONERROR, true); // This set to true will display errors on the screen if errors occur
         
+        // Url to submit to
+        curl_setopt($curl, CURLOPT_URL, $url);
+        
+        // Return output instead of outputting it
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        
+        // We are doing a post request
+        curl_setopt($curl, CURLOPT_POST, true);
+        
+        // Adding the post variables to the request
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        
+        // This is set to true so will display errors on the screen if errors occur
+        curl_setopt($curl, CURLOPT_FAILONERROR, true);
+        
+        // Execute the request and fetch the response and check for errors below
         $response = curl_exec($curl);
         
         if ($response === false) {
             echo 'cURL Error: ' . curl_error($curl);
         }
+        
+        // Close and free up the curl handle
         curl_close($curl);
         
         $result = json_decode($response, true);
