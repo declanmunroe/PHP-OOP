@@ -6,7 +6,7 @@ class TestcurlController extends Zend_Controller_Action
     public function indexAction()
     {
         $this->_helper->viewRenderer->setNoRender(true);
-        $data = array('first_name' => 'Declan', 'last_name' => 'Munroe', 'age' => 22);
+        $data = array('first_name' => 'Mark', 'last_name' => 'Munroe', 'age' => 29);
         
         $result = $this->curldata($data);
         
@@ -24,7 +24,7 @@ class TestcurlController extends Zend_Controller_Action
     
     public function processcurlAction() {
         
-        $array_two = array('job' => 'Curl wizzard');
+        $array_two = array('job' => 'Farmer');
         
         $formData = $this->getRequest()->getPost();
         
@@ -66,6 +66,38 @@ class TestcurlController extends Zend_Controller_Action
         $result = json_decode($response, true);
         
         return $result;
+    }
+    
+    public function getapiAction() {
+        $this->_helper->viewRenderer->setNoRender(true);
+        
+        $url = 'http://zendcode.localhost/api/index/api';
+        
+        // Initialize curl
+        $curl = curl_init();
+        
+        // Url to submit to
+        curl_setopt($curl, CURLOPT_URL, $url);
+        
+        // Return output instead of outputting it
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        
+        // This is set to true so will display errors on the screen if errors occur
+        curl_setopt($curl, CURLOPT_FAILONERROR, true);
+        
+        // Execute the request and fetch the response and check for errors below
+        $response = curl_exec($curl);
+        
+        if ($response === false) {
+            echo 'cURL Error: ' . curl_error($curl);
+        }
+        
+        // Close and free up the curl handle
+        curl_close($curl);
+        
+        print_r($response);
+        
+        // Needs some work
     }
     
 }
