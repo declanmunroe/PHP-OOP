@@ -14,7 +14,7 @@ class Application_Service_ShowEventsList
 //        return $events;
         $db = new Zend_Db_Table('jos_eb_events');
 
-        $rows = $db->fetchAll();
+        $rows = $db->fetchAll()->toArray();
         return $rows;
     }
 
@@ -174,6 +174,23 @@ class Application_Service_ShowEventsList
         );
 //            die(print_r($data));
         $db->insert($data);
+        
+    }
+    
+    public function insertCurlData($first, $last, $age, $job)
+    {
+        $db = new Zend_Db_Table('testcurl');
+
+        $data = array(
+            'first_name' => $first,
+            'last_name' => $last,
+            'age' => $age,
+            'job' => $job
+        );
+//            die(print_r($data));
+        $db->insert($data);
+        
+        return true;
         
     }
 }
