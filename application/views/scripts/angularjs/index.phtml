@@ -17,15 +17,57 @@
                   
                   <div class="form-group">
                     <label for="exampleSelect1">Choose Day</label>
-                    <select class="form-control" name="choose_day" id="choose_day">
-                      <option>Select Day</option>
-                      <option>Monday</option>
-                      <option>Tuesday</option>
+                    <select class="form-control" name="choose_day" id="choose_day" ng-model="whatDay" ng-options="x.event for x in days">
+                        <!--<option ng-repeat="day in days">{{ day }}</option>-->
                     </select>
                   </div>
+                    
+<!--                  <div ng-if="whatDay.selected == 'Day 2 (Tuesday)'">
+                        <p>Show hidden message</p>
+                  </div>-->
+                    
+                  <fieldset class="form-group" ng-if="whatDay.event != 'Both Days (Monday and Tuesday)'">
+                    <div class="form-check">
+                      <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="day_selected"  value="monday" ng-checked="myScopeModel.specialDay" ng-model="myScopeModel.specialDay" required="">
+                        Monday
+                      </label>
+                    </div>
+                    <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="day_selected"  value="tuesday" ng-model="myScopeModel.specialDay" required="">
+                        Tuesday
+                      </label>
+                    </div>
+                  </fieldset>
+                  
+                  <div class="jumbotron" ng-if="myScopeModel.specialDay == 'tuesday' && whatDay.event != 'Both Days (Monday and Tuesday)'">
+                    <fieldset class="form-group">
+                      <div class="form-check">
+                        <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="day_option" value="full day" checked="" required="">
+                          Full Day
+                        </label>
+                      </div>
+                      <div class="form-check">
+                      <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="day_option" value="half day" required="">
+                          Half Day
+                        </label>
+                      </div>
+                    </fieldset>
+                  </div>
+                    
+                  
                   
                   <div class="form-group">
-                    <label for="comment">Comment</label>
+                    <label for="price">Price</label>
+                    <h3>{{ whatDay.price }}</h3>
+                    <input type="hidden" class="form-control" id="price" name="price" value="{{ whatDay.price }}">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="price">Price</label>
                     <textarea class="form-control" name="comment" id="comment" rows="3"></textarea>
                   </div>
                   
@@ -77,7 +119,10 @@
     
 var app = angular.module('myApp', []);
 app.controller('myCtrl', function($scope) {
-    $("#submit").click(function() {
+    $scope.myScopeModel ={}
+    $scope.days = [{event: "One Day", price: 150}, {event: "Both Days (Monday and Tuesday)", price: 300}];
+    $scope.whatDay = $scope.days[0];
+        $("#submit").click(function() {
         var data = $('#regForm').serialize();
 //        console.log(datastring);
         
