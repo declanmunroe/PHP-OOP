@@ -120,7 +120,7 @@
 var app = angular.module('myApp', []);
 app.controller('myCtrl', function($scope) {
     $scope.myScopeModel ={}
-    $scope.days = [{event: "One Day", price: 150}, {event: "Both Days (Monday and Tuesday)", price: 300}];
+    $scope.days = [{event: "One Day", price: 150}, {event: "Both Days (Monday and Tuesday)", price: 300}, {event: "Test day", price: 999}];
     $scope.whatDay = $scope.days[0];
         $("#submit").click(function() {
         var data = $('#regForm').serialize();
