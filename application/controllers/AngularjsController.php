@@ -13,5 +13,10 @@ class AngularjsController extends Zend_Controller_Action
 //        die(print_r($formData));
         $this->_helper->json($formData);
     }
+    
+    public function paypalAction() {
+        $formData = $this->getRequest()->getPost();
+        die(print_r($formData));
+    }
 }
 
