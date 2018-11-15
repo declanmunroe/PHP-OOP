@@ -96,10 +96,27 @@ class AuthenticationController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
-        $email = 'declan.munroe@ics.ie';
-
-        $hashemail = new Application_Service_Tokens();
-        $result = $hashemail->moodlehash($email);
-        die(var_dump($result));
+        // https://security.stackexchange.com/questions/8015/what-should-be-used-as-a-salt
+        
+//        $password = password_hash("kevin", PASSWORD_BCRYPT);    Strong working version
+//        if (password_verify("kevin", $password)) {
+//            echo "Your in";
+//        } else {
+//            echo "Not today";
+//        }
+        
+        $salt = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        
+        $pass1 = "kevin";
+        $hashed1 = sha1(md5($salt.$pass1.$salt));
+        
+        $pass2 = "kevin";
+        $hashed2 = sha1(md5($salt.$pass2.$salt));
+        
+        if($hashed1 == $hashed2) {
+            echo "Your in";
+        } else {
+            echo "Not today sunshine";
+        }
     }
 }
