@@ -14,7 +14,7 @@ class Application_Service_ShowEventsList
 //        return $events;
         $db = new Zend_Db_Table('jos_eb_events');
 
-        $rows = $db->fetchAll()->toArray();
+        $rows = $db->fetchAll(); // Retrieve an object of results and not an array
         return $rows;
     }
 

@@ -27,7 +27,6 @@ class AuthenticationController extends Zend_Controller_Action
 
         $this->_helper->layout->disableLayout();
         $form = new Application_Form_LoginAdmin();
-        // die($form);
 
         if ($this->getRequest()->isPost()) {
             $formData = $this->getRequest()->getPost();
@@ -38,12 +37,11 @@ class AuthenticationController extends Zend_Controller_Action
 
                 $username = $formData['username'];
                 $password = $formData['password'];
-
-//                $username = 'declan.munroe@ics.ie';
-//                $password = 'declan';
+                
+                $hashed = $this->hashpassword($password);
 
                 $authAdapter->setIdentity($username)
-                    ->setCredential($password);
+                    ->setCredential($hashed);
 
                 $auth = Zend_Auth::getInstance();
                 $result = $auth->authenticate($authAdapter);
@@ -118,5 +116,14 @@ class AuthenticationController extends Zend_Controller_Action
         } else {
             echo "Not today sunshine";
         }
+    }
+    
+    private function hashpassword($password) {
+        $salt = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        
+        $pass = $password;
+        $hashed = sha1(md5($salt.$pass.$salt));
+        
+        return $hashed;
     }
 }
