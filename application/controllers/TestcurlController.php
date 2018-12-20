@@ -25,7 +25,7 @@ class TestcurlController extends Zend_Controller_Action
     
     public function processcurlAction() {
         
-        $array_two = array('job' => 'The cow whisperer');
+        $array_two = array('job' => 'Test ngrok after push');
         
         $formData = $this->getRequest()->getPost();
         
