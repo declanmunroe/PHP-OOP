@@ -6,7 +6,7 @@ class TestcurlController extends Zend_Controller_Action
     public function indexAction()
     {
         $this->_helper->viewRenderer->setNoRender(true);
-        $data = array('first_name' => 'Mark', 'last_name' => 'Munroe', 'age' => 29);
+        $data = array('first_name' => 'Joe', 'last_name' => 'Munroe', 'age' => 59);
         
         $result = $this->curldata($data);
         
@@ -15,6 +15,7 @@ class TestcurlController extends Zend_Controller_Action
 //        print_r($response);
         
         if ($response) {
+            $this->_helper->json(['ngrok' => $result]);
             echo "New job added : " . $result['response']['job'];
         } else {
             echo "Something went wrong";
@@ -24,7 +25,7 @@ class TestcurlController extends Zend_Controller_Action
     
     public function processcurlAction() {
         
-        $array_two = array('job' => 'Farmer');
+        $array_two = array('job' => 'The cow whisperer');
         
         $formData = $this->getRequest()->getPost();
         
@@ -33,7 +34,7 @@ class TestcurlController extends Zend_Controller_Action
     }
     
     private function curldata($data) {
-        $url = 'http://zendcode.localhost/testcurl/processcurl';
+        $url = 'https://fafc79ff.ngrok.io/testcurl/processcurl';
         
         // Initialize curl
         $curl = curl_init();

@@ -1,6 +1,7 @@
 <?php
 $jsonfile = file_get_contents('todo.json');
 $array = json_decode($jsonfile, true);
+die(phpversion());
 ?>
 
 <table class="table table-striped table-bordered table-hover display compact">
@@ -16,7 +17,7 @@ $array = json_decode($jsonfile, true);
     <tbody>
     <?php $img_link; ?>
     <?php foreach ($array as $content) : ?>
-        <? $img_link = 'http://zendcode.localhost/img/'.$content['pic_url']; ?>
+        <?php $img_link = 'http://zendcode.localhost/img/'.$content['pic_url']; ?>
         <tr>
             <td><?php echo $content['id']; ?></td>
             <td><img src="<?= $img_link ?>" class="center-block img-responsive" width="100px" height="100px"/></td>
