@@ -33,5 +33,29 @@ class S3Controller extends Zend_Controller_Action
         
         echo $result2['ObjectURL'] . "\n";
     }
+    
+    public function uploadAction() {
+        
+        $s3Client = S3Client::factory(array(
+            'credentials' => array(
+                'key'    => AWS_ACCESS_KEY,
+                'secret' => AWS_SECRET_KEY,
+            )
+        ));
+        
+        if ($this->getRequest()->isPost()) {
+            
+            $keyName = basename($_FILES['picture']['name']);
+            $file_location = $_FILES['picture']['tmp_name'];
+            
+            $upload_img = $s3Client->putObject(array(
+                'Bucket' => 'declan-developer-upload',
+                'Key'    => $keyName,
+                'SourceFile' => $file_location
+            ));
+        
+        echo $upload_img['ObjectURL'] . "\n";
+        }
+    }
 }
 
