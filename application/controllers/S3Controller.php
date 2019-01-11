@@ -50,7 +50,7 @@ class S3Controller extends Zend_Controller_Action
             
             $upload_img = $s3Client->putObject(array(
                 'Bucket' => 'declan-developer-upload',
-                'Key'    => $keyName,
+                'Key'    => 'personal/'.$keyName, // Example of posting an image to a folder in a bucket
                 'SourceFile' => $file_location,
                 'ContentType' => $_FILES['picture']['type'] // If i dont set the content type the image will download instead of render in the browser
             ));
