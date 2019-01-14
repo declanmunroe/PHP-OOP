@@ -1,2 +1,12 @@
-
+<form action="/stripe" method="post">
+  <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+          data-key="<?php echo STRIPE_PUBLIC_KEY ?>"
+          data-description="Product 1"
+          data-amount="100"
+          data-locale="auto"
+          data-currency="eur">
+  </script>
+  <input type="hidden" name="description" value="Product 1">
+  <input type="hidden" name="price" value="100">
+</form>
 

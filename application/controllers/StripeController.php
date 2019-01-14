@@ -13,13 +13,16 @@ class StripeController extends Zend_Controller_Action
 {
     public function init()
     {
-        $stripe = array('secret_key' => '1234', 'publishable_key' => '9999');
+        $stripe = array('secret_key' => STRIPE_SECRET_KEY, 'publishable_key' => STRIPE_PUBLIC_KEY);
         
         Stripe::setApiKey($stripe['secret_key']);
     }
     
     public function indexAction()
     {  
-    
+        if ($this->getRequest()->isPost()) {
+            $formData = $this->getRequest()->getPost();
+            die(print_r($formData));
+        }
     }
 }
