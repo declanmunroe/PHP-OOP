@@ -8,6 +8,8 @@
  */
 
 use Stripe\Stripe;
+use Stripe\Customer;
+use Stripe\Charge;
 
 class StripeController extends Zend_Controller_Action
 {
@@ -22,7 +24,12 @@ class StripeController extends Zend_Controller_Action
     {  
         if ($this->getRequest()->isPost()) {
             $formData = $this->getRequest()->getPost();
-            die(print_r($formData));
+            
+            $customer = Customer::create(array('email' => $formData['stripeEmail'], 'source' => $formData['stripeToken']));
+            
+            $charge = Charge::create(array('amount' => 100, 'currency' => 'eur', 'description' => 'Testing out stripe api', 'customer' => $customer->id));
+            
+            print_r($charge);
         }
     }
 }
