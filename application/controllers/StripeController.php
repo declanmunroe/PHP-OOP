@@ -51,7 +51,7 @@ class StripeController extends Zend_Controller_Action
     {
         // Use stripe dashboard web hook section to test script
         // Web hooks will only work wirh https:// so use ngrok for testing before deployment to live server
-        $response = file_get_contents('php://input');
+        $response = file_get_contents('php://input'); // This method gets the raw post data from a json body in json format
 
         $response_array = json_decode($response, true);
 
