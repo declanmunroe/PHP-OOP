@@ -54,20 +54,27 @@ class StripeController extends Zend_Controller_Action
         $response = file_get_contents('php://input'); // This method gets the raw post data from a json body in json format
 
         $response_array = json_decode($response, true);
+        
+        if ($response_array['data']['object']['status'] == 'succeeded')
+        {
+            $charge_id = $response_array['data']['object']['id'];
+            $email = $response_array['data']['object']['source']['name'];
 
-        $charge_id = $response_array['data']['object']['id'];
-        $email = $response_array['data']['object']['email'];
+            $db = new Zend_Db_Table('stripe_events');
 
-        $db = new Zend_Db_Table('stripe_events');
+            $data = array(
+                'email' => $email,
+                'charge_id' => $charge_id
+            );
 
-        $data = array(
-            'email' => $email,
-            'charge_id' => $charge_id
-        );
+            $db->insert($data);
 
-        $db->insert($data);
-
-        $this->_helper->json($data);
+            $this->_helper->json($data);
+        }
+        else
+        {
+            $this->_helper->json("Payment ERROR");
+        }
         
     }
 }
