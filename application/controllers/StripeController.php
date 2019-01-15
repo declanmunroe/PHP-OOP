@@ -29,7 +29,21 @@ class StripeController extends Zend_Controller_Action
             
             $charge = Charge::create(array('amount' => 100, 'currency' => 'eur', 'description' => 'Testing out stripe api', 'customer' => $customer->id));
             
-            print_r($charge);
+            //print_r($charge);
+            
+            if ($charge->paid == 1)
+            {
+                $this->getRequest()->setParam('id', $charge->id);
+                $this->forward('success');
+            }
+            else {
+                die("Payment error");
+            }
         }
+    }
+    
+    public function successAction()
+    {
+        $this->view->charge_id = $charge_id = $this->getRequest()->getParam('id');
     }
 }
