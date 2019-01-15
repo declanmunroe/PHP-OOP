@@ -46,4 +46,17 @@ class StripeController extends Zend_Controller_Action
     {
         $this->view->charge_id = $charge_id = $this->getRequest()->getParam('id');
     }
+    
+    public function webhookAction()
+    {
+        $response = file_get_contents('php://input');
+        
+        $response_array = json_decode($response, true);
+        
+        $email = $response_array['data']['object']['email'];
+        $charge_id = $response_array['data']['object']['id'];
+        
+        $this->_helper->json($response_array);
+        //die("Webhook");
+    }
 }
