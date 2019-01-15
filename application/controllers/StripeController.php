@@ -49,14 +49,25 @@ class StripeController extends Zend_Controller_Action
     
     public function webhookAction()
     {
+        // Use stripe dashboard web hook section to test script
+        // Web hooks will only work wirh https:// so use ngrok for testing before deployment to live server
         $response = file_get_contents('php://input');
-        
+
         $response_array = json_decode($response, true);
-        
-        $email = $response_array['data']['object']['email'];
+
         $charge_id = $response_array['data']['object']['id'];
+        $email = $response_array['data']['object']['email'];
+
+        $db = new Zend_Db_Table('stripe_events');
+
+        $data = array(
+            'email' => $email,
+            'charge_id' => $charge_id
+        );
+
+        $db->insert($data);
+
+        $this->_helper->json($data);
         
-        $this->_helper->json($response_array);
-        //die("Webhook");
     }
 }
