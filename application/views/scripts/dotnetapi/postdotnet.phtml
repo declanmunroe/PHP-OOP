@@ -1,0 +1,25 @@
+<a class="dotnet" data-id="50">Send POST REQUEST to dot net</a>
+
+<script>
+    $(".dotnet").click(function () {
+        var num = $(this).attr("data-id");
+        //alert(num);
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:51686/dictonaryapi/postfromzendapplication/' + num,
+//            crossDomain : true,
+//            xhrFields: {
+//                withCredentials: true
+//            },
+//            xhrFields: {
+//                withCredentials: true
+//            },
+            data: { num: num },
+            success: function (result) {
+                //alert("It worked");
+                console.log(result);
+            }
+        });
+    });
+</script>

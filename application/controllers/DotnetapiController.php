@@ -21,4 +21,9 @@ class DotnetapiController extends Zend_Controller_Action
         
         $this->_helper->json($new_array);
     }
+    
+    public function postdotnetAction()
+    {
+        
+    }
 }
