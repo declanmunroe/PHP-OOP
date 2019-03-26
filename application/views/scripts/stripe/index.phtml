@@ -1,4 +1,4 @@
-<form action="/stripe" method="post">
+<form action="/stripe" method="post" style="display: none;">
   <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
           data-key="<?php echo STRIPE_PUBLIC_KEY ?>"
           data-description="Product 1"
@@ -9,4 +9,15 @@
   <input type="hidden" name="description" value="Product 1">
   <input type="hidden" name="price" value="100">
 </form>
+
+
+<!--Use trigger to automalicly click the pay now button to open the stripe pop up payment method after the user has selected the pay by card button like on peopleserver
+and we save their info to the registrants table and set stripe_pending. Then submit card payment details and update to stripe approved in registrants table once we validata ipn etc 
+on stripe webhook--> 
+<script>
+    $(document).ready(function(){
+        alert("Submitting form");
+        $(".stripe-button-el").trigger('click'); // .stripe-button-el is the class name given to the stripe pay now button. Found by using inspect element
+      });
+</script>
 
