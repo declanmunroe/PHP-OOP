@@ -26,8 +26,8 @@ class StripecheckoutController extends Zend_Controller_Action
         $stripe_create_response = Session::create([
           'payment_method_types' => ['card'],
           'line_items' => [[
-            'name' => 'T-shirt',
-            'description' => 'Comfortable cotton t-shirt',
+            'name' => $formData['description'],
+            'description' => $formData['description'],
             'images' => [],
             'amount' => $formData['price'],
             'currency' => 'eur',

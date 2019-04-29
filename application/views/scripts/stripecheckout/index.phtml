@@ -1,16 +1,21 @@
-<button type='button' class="buy-now" data-price='1000'>Half Toolkit</button>
-<button type='button' class="buy-now" data-price='2000'>Full Toolkit</button>
+<button type='button' class="buy-now" data-price='1000' data-description='Half Toolkit Module'>Half Toolkit</button>
+<button type='button' class="buy-now" data-price='2000' data-description='Full Toolkit Module'>Full Toolkit</button>
+
+<div id="loading" style="display: none;"><img src="https://www.techweek.ie/wp-content/themes/eventchamp-child/712.GIF" alt="Loading" /></div>
 
 <script>
     
 $(".buy-now").click(function() {
 
+$("#loading").css('display', 'block');
+
 var price = $(this).attr('data-price');
+var description = $(this).attr('data-description');
 
     $.ajax({
         type: 'POST',
         url: '/stripecheckout/chargeandcreate',
-        data: {price : price},
+        data: {price : price, description : description},
         success: function(response) {
             console.log(response['id']);
             
