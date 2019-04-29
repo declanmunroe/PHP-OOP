@@ -1,1 +1,17 @@
-<h1>On stripe elements page</h1>
+<!-- https://stripe.com/docs/payments/payment-intents/quickstart -->
+
+<input type="radio" class="toolkit" value="Single Toolkit" data-price='2500'> Single Toolkit<br>
+<input type="radio" class="toolkit" value="Half Module Toolkit" data-price='5000'> Half Module Toolkit<br>
+<input type="radio" class="toolkit" value="Full Module Toolkit" data-price='7500'> Full Module Toolkit
+
+<script>
+    
+$(".toolkit").click(function() {
+    
+    var item = $(this).val();
+    var price = $(this).attr('data-price');
+    console.log(item + ' is ' + price);
+    
+});
+
+</script>
