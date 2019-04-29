@@ -1,2 +1,23 @@
-<h1>Stripe checkout testing new</h1>
+<button type='button' class="buy-now" data-price='1000'>Half Toolkit</button>
+<button type='button' class="buy-now" data-price='2000'>Full Toolkit</button>
+
+<script>
+    
+$(".buy-now").click(function() {
+
+var price = $(this).attr('data-price');
+alert(price);
+//
+//    $.ajax({
+//        type: 'POST',
+//        url: '/angularjs/processdata',
+//        data: data,
+//        success: function(result) {
+//            console.log(result);
+//        }
+//    });
+    
+});
+
+</script>
 
