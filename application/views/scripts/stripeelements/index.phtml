@@ -2,7 +2,16 @@
 
 <input type="radio" name='toolkit' class="toolkit" value="Single Toolkit" data-price='2500'> Single Toolkit<br>
 <input type="radio" name='toolkit' class="toolkit" value="Half Module Toolkit" data-price='5000'> Half Module Toolkit<br>
-<input type="radio" name='toolkit' class="toolkit" value="Full Module Toolkit" data-price='7500'> Full Module Toolkit
+<input type="radio" name='toolkit' class="toolkit" value="Full Module Toolkit" data-price='7500'> Full Module Toolkit<br><br>
+
+<div id="payment-show" style="display: none;">
+    <input id="cardholder-name" type="text">
+    <!-- placeholder for Elements -->
+    <div id="card-element"></div>
+    <button id="card-button" data-secret="">
+      Submit Payment
+    </button>
+</div>
 
 <script>
     
@@ -18,6 +27,12 @@ $(".toolkit").click(function() {
         data: {price : price},
         success: function(response) {
             console.log(response);
+            
+            var client_secret = response['client_secret'];
+            console.log(client_secret);
+            
+            $('#card-button').attr('data-secret', client_secret);
+            $('#payment-show').css('display', 'block');
         }
     });
     
