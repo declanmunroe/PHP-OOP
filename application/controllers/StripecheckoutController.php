@@ -33,7 +33,7 @@ class StripecheckoutController extends Zend_Controller_Action
             'currency' => 'eur',
             'quantity' => 1,
           ]],
-          'success_url' => 'http://zendcode.localhost/stripecheckout/success',
+          'success_url' => "http://zendcode.localhost/stripecheckout/success/reg_id/1234/status/paid/price/{$formData['price']}",
           'cancel_url' => 'http://zendcode.localhost/stripecheckout/cancel',
         ]);
         
@@ -42,7 +42,8 @@ class StripecheckoutController extends Zend_Controller_Action
     
     public function successAction()
     {
-        die("On success page");
+        $params = $this->getAllParams();
+        die(print_r($params));
     }
     
     public function cancelAction()
