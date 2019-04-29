@@ -34,15 +34,43 @@ $(".toolkit").click(function() {
             $('#card-button').attr('data-secret', client_secret);
             $('#payment-show').css('display', 'block');
             
-            var stripe = Stripe('<?= STRIPE_PUBLIC_KEY; ?>');
-
-            var elements = stripe.elements();
-            var cardElement = elements.create('card');
-            cardElement.mount('#card-element');
+            runstripe();
+            
         }
     });
     
 });
+
+function runstripe() {
+    console.log("Stripe running");
+    var stripe = Stripe('<?= STRIPE_PUBLIC_KEY; ?>');
+    
+    var elements = stripe.elements();
+    var cardElement = elements.create('card');
+    cardElement.mount('#card-element');
+    
+    $("#card-button").click(function() {
+        var cardholderName = document.getElementById('cardholder-name');
+        var cardButton = document.getElementById('card-button');
+        var clientSecret = cardButton.dataset.secret;
+
+        console.log(clientSecret);
+    
+        stripe.handleCardPayment(
+            clientSecret, cardElement, {
+              payment_method_data: {
+                billing_details: {name: cardholderName.value}
+              }
+            }
+          ).then(function(result) {
+            if (result.error) {
+              // Display error.message in your UI.
+            } else {
+              // The payment has succeeded. Display a success message.
+            }
+        });
+    });
+}
 
 </script>
 
