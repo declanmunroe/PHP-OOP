@@ -33,9 +33,17 @@ $(".toolkit").click(function() {
             
             $('#card-button').attr('data-secret', client_secret);
             $('#payment-show').css('display', 'block');
+            
+            var stripe = Stripe('<?= STRIPE_PUBLIC_KEY; ?>');
+
+            var elements = stripe.elements();
+            var cardElement = elements.create('card');
+            cardElement.mount('#card-element');
         }
     });
     
 });
 
 </script>
+
+<script src="https://js.stripe.com/v3/"></script>
