@@ -13,6 +13,7 @@ use Stripe\Charge;
 
 class StripeController extends Zend_Controller_Action
 {
+    // declanmunroedeveloper stripe account
     public function init()
     {
         $stripe = array('secret_key' => STRIPE_SECRET_KEY, 'publishable_key' => STRIPE_PUBLIC_KEY);
