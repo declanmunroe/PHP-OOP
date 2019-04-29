@@ -12,6 +12,15 @@ $(".toolkit").click(function() {
     var price = $(this).attr('data-price');
     console.log(item + ' is ' + price);
     
+    $.ajax({
+        type: 'POST',
+        url: '/stripeelements/createpaymentintent',
+        data: {price : price},
+        success: function(response) {
+            console.log(response);
+        }
+    });
+    
 });
 
 </script>
