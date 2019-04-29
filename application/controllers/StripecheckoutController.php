@@ -38,6 +38,9 @@ class StripecheckoutController extends Zend_Controller_Action
         ]);
         
         $this->_helper->json($stripe_create_response);
+        
+        // Docs say to validate a propper successfull charge transaction that you should not fully rely on the success url, you should use a webhook as well.
+        // But to use a webhook it is best practice if not nessacary to have seperate stripe accounts for every stripe payment option in each website
     }
     
     public function successAction()
