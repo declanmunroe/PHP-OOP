@@ -6,16 +6,15 @@
 $(".buy-now").click(function() {
 
 var price = $(this).attr('data-price');
-alert(price);
-//
-//    $.ajax({
-//        type: 'POST',
-//        url: '/angularjs/processdata',
-//        data: data,
-//        success: function(result) {
-//            console.log(result);
-//        }
-//    });
+
+    $.ajax({
+        type: 'POST',
+        url: '/stripecheckout/chargeandcreate',
+        data: {price : price},
+        success: function(result) {
+            console.log(result);
+        }
+    });
     
 });
 
