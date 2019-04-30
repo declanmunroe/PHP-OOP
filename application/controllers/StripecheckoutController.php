@@ -51,6 +51,8 @@ class StripecheckoutController extends Zend_Controller_Action
     
     public function successAction()
     {
+        // Below url is stripe payment receipt for success payment
+        // https://pay.stripe.com/receipts/acct_1DsaK9EosXjNQZCs/ch_1EUsUWEosXjNQZCsdyZe3NVi/rcpt_EyqAeA74HayvH2FNMC8Bic6TSnXMvKb
         //$params = $this->getAllParams(); Next version will have a unique code attached to the success url which will be stored in the meta data like done above.
         
         $events = PaymentIntent::all(["limit" => 3]);
