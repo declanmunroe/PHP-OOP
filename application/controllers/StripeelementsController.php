@@ -19,7 +19,7 @@ class StripeelementsController extends Zend_Controller_Action
     {  
         $formData = $this->getRequest()->getPost();
         
-        Stripe::setApiKey("sk_test_4eC39HqLyjWDarjtT1zdp7dc");
+        Stripe::setApiKey(STRIPE_SECRET_KEY);
 
         $intent_response = PaymentIntent::create([
           'amount' => $formData['price'],
