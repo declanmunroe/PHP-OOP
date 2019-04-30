@@ -2,12 +2,14 @@
 
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
+use Stripe\PaymentIntent;
+use Stripe\StripeEvent;
 
 class StripecheckoutController extends Zend_Controller_Action
 {
     public function init()
     {
-       
+       Stripe::setApiKey(STRIPE_SECRET_KEY);
     }
     
     public function indexAction()
@@ -18,8 +20,6 @@ class StripecheckoutController extends Zend_Controller_Action
     public function chargeandcreateAction()
     {
         $formData = $this->getRequest()->getPost();
-        
-        Stripe::setApiKey(STRIPE_SECRET_KEY);
         
         // To use Session you must have the latest version of Stripe at least 6 and above
         // Also you must have an Account name set up in https://dashboard.stripe.com/account        Declan Ics Dev was the account name i gave
@@ -33,9 +33,15 @@ class StripecheckoutController extends Zend_Controller_Action
             'currency' => 'eur',
             'quantity' => 1,
           ]],
-          'success_url' => "http://zendcode.localhost/stripecheckout/success/reg_id/1234/status/paid/price/{$formData['price']}",
+          'success_url' => "http://zendcode.localhost/stripecheckout/success",
           'cancel_url' => 'http://zendcode.localhost/stripecheckout/cancel',
         ]);
+          
+        PaymentIntent::retrieve($stripe_create_response->payment_intent);  // Retrieves the current state of my payment intent // Right now meta data is empty
+        
+        PaymentIntent::update($stripe_create_response->payment_intent,['metadata' => ['reg_id' => '5666', 'intent_pid' => $stripe_create_response->payment_intent]]); // Update current state to accomodate meta_data
+        
+        PaymentIntent::retrieve($stripe_create_response->payment_intent); // Retrieve the updated payment intent with the meta data added to my stripe object response
         
         $this->_helper->json($stripe_create_response);
         
@@ -45,8 +51,12 @@ class StripecheckoutController extends Zend_Controller_Action
     
     public function successAction()
     {
-        $params = $this->getAllParams();
-        die(print_r($params));
+        //$params = $this->getAllParams(); Next version will have a unique code attached to the success url which will be stored in the meta data like done above.
+        
+        $events = PaymentIntent::all(["limit" => 3]);
+        
+        die(print_r($events));
+        
     }
     
     public function cancelAction()
