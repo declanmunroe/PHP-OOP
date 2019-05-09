@@ -1,6 +1,6 @@
 {
     "require": {
         "aws/aws-sdk-php": "2.8.31",
-        "stripe/stripe-php" : "^6.15"
+        "stripe/stripe-php" : "6.34.2"
     }
 }
