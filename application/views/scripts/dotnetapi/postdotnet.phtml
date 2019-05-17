@@ -6,16 +6,9 @@
         //alert(num);
 
         $.ajax({
-            type: 'POST',
-            url: 'http://localhost:51686/dictonaryapi/postfromzendapplication/' + num,
-//            crossDomain : true,
-//            xhrFields: {
-//                withCredentials: true
-//            },
-//            xhrFields: {
-//                withCredentials: true
-//            },
-            data: { num: num },
+            type: 'GET',
+            url: 'http://dotnet-api.eu-west-1.elasticbeanstalk.com/api/values/',
+//            data: { num: num },
             success: function (result) {
                 //alert("It worked");
                 console.log(result);

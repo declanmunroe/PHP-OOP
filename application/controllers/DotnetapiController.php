@@ -3,7 +3,7 @@
 class DotnetapiController extends Zend_Controller_Action
 {
     public function indexAction() {
-        $api_data = file_get_contents('http://localhost:51686/dictonaryapi');
+        $api_data = file_get_contents('http://dotnet-api.eu-west-1.elasticbeanstalk.com/api/values');
         
         $this->_helper->json($api_data);
     }
