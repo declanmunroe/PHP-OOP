@@ -1,4 +1,7 @@
-<a class="dotnet" data-id="50">Send POST REQUEST to dot net</a>
+<a class="dotnet" data-id="50">Send GET REQUEST to dot net</a>
+<br>
+<br>
+<a class="dotnetpost" data-postid="22">Send POST REQUEST to dot net</a>
 
 <script>
     $(".dotnet").click(function () {
@@ -11,6 +14,21 @@
 //            data: { num: num },
             success: function (result) {
                 //alert("It worked");
+                console.log(result);
+            }
+        });
+    });
+    
+    $(".dotnetpost").click(function () {
+        var number = $(this).attr("data-postid");
+        //alert(number);
+        
+        $.ajax({
+            type: 'POST',
+            url: 'http://dotnet-api.eu-west-1.elasticbeanstalk.com/api/values/',
+            data: JSON.stringify(number), // Need to use stringify and set the content type to json as im sending data through the body and not an object
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
                 console.log(result);
             }
         });
