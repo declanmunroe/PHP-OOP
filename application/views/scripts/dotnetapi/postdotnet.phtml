@@ -10,7 +10,7 @@
 
         $.ajax({
             type: 'GET',
-            url: 'http://dotnet-api.eu-west-1.elasticbeanstalk.com/api/values/',
+            url: 'http://localhost:53553/api/values',
 //            data: { num: num },
             success: function (result) {
                 //alert("It worked");
@@ -25,7 +25,7 @@
         
         $.ajax({
             type: 'POST',
-            url: 'http://dotnet-api.eu-west-1.elasticbeanstalk.com/api/values/',
+            url: 'http://localhost:53553/api/values',
             data: JSON.stringify(number), // Need to use stringify and set the content type to json as im sending data through the body and not an object
             contentType: "application/json; charset=utf-8",
             success: function (result) {
