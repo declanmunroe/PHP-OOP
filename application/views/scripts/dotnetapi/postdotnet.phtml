@@ -1,7 +1,7 @@
 <a class="dotnet" data-id="50">Send GET REQUEST to dot net</a>
 <br>
 <br>
-<a class="dotnetpost" data-postid="22">Send POST REQUEST to dot net</a>
+<a class="dotnetpostfamily" data-firstname="Annette" data-lastname="Munroe" data-typeofmember="Mother">Send POST REQUEST Update Family Table</a>
 
 <script>
     $(".dotnet").click(function () {
@@ -19,15 +19,19 @@
         });
     });
     
-    $(".dotnetpost").click(function () {
-        var number = $(this).attr("data-postid");
+    $(".dotnetpostfamily").click(function () {
+        var family = {};
+        family.First_Name = $(this).attr("data-firstname");
+        family.Last_Name = $(this).attr("data-lastname");
+        family.Type_Of_Member = $(this).attr("data-typeofmember");
         //alert(number);
         
         $.ajax({
             type: 'POST',
             url: 'http://localhost:53553/api/values',
-            data: JSON.stringify(number), // Need to use stringify and set the content type to json as im sending data through the body and not an object
-            contentType: "application/json; charset=utf-8",
+            date: family,
+            //data: JSON.stringify(number), // Need to use stringify and set the content type to json as im sending data through the body and not an object
+            //contentType: "application/json; charset=utf-8",
             success: function (result) {
                 console.log(result);
             }
