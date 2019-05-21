@@ -29,9 +29,8 @@
         $.ajax({
             type: 'POST',
             url: 'http://localhost:53553/api/values',
-            date: family,
-            //data: JSON.stringify(number), // Need to use stringify and set the content type to json as im sending data through the body and not an object
-            //contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(family), // Need to use stringify and set the content type to json as im sending data through the body and not an object
+            contentType: "application/json; charset=utf-8",
             success: function (result) {
                 console.log(result);
             }
