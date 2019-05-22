@@ -5,6 +5,9 @@
 <br>
 <br>
 <a class="dotnetupdate" data-id="1002" data-firstname="Michael" data-lastname="Sweeney" data-typeofmember="Uncle">Send UPDATE REQUEST Update Family Table</a>
+<br>
+<br>
+<a class="dotnetdelete">Send DELETE REQUEST Remove Record in Family Table</a>
 
 <script>
     $(".dotnet").click(function () {
@@ -54,6 +57,17 @@
             url: 'http://localhost:53553/api/values/' + id,
             data: JSON.stringify(family), // Need to use stringify and set the content type to json as im sending data through the body and not an object
             contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                console.log(result);
+            }
+        });
+    });
+    
+    $(".dotnetdelete").click(function () {
+        
+        $.ajax({
+            type: 'DELETE',
+            url: 'http://localhost:53553/api/values/' + 2002,
             success: function (result) {
                 console.log(result);
             }
