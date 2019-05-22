@@ -50,7 +50,7 @@
         //alert(number);
         
         $.ajax({
-            type: 'UPDATE',
+            type: 'PUT',
             url: 'http://localhost:53553/api/values/' + id,
             data: JSON.stringify(family), // Need to use stringify and set the content type to json as im sending data through the body and not an object
             contentType: "application/json; charset=utf-8",
