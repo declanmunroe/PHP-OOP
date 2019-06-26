@@ -13,6 +13,10 @@ class EventController extends Zend_Controller_Action
     {
         /* Initialize action controller here */
         $auth = Zend_Auth::getInstance();
+        //die(var_dump(print_r(Zend_Auth::getInstance())));
+        //die(var_dump(print_r(Zend_Auth::getInstance()->getStorage())));
+        die(var_dump(print_r(Zend_Auth::getInstance()->getStorage()->read())));
+        //die(var_dump(print_r(Zend_Auth::getInstance()->hasIdentity())));
 
         if (!$auth->hasIdentity()) {
             $urlOptions = array('controller' => 'authentication', 'action' => 'login', 'module' => 'default');

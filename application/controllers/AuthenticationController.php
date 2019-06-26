@@ -20,6 +20,11 @@ class AuthenticationController extends Zend_Controller_Action
 
     public function loginAction()
     {
+        // https://framework.zend.com/manual/1.0/en/zend.auth.html        This article on sessions does not seem to work. To get around this I've introduced a portal value in
+        //                                                                the auth object below
+        //die(var_dump(print_r(Zend_Auth::getInstance())));
+        //die(var_dump(print_r(Zend_Auth::getInstance()->getStorage())));
+        //die(var_dump(print_r(Zend_Auth::getInstance()->getStorage()->read())));
         if (Zend_Auth::getInstance()->hasIdentity())
         {
             $this->redirect('event/addmultibleregistrants');
@@ -33,17 +38,24 @@ class AuthenticationController extends Zend_Controller_Action
 
             if ($form->isValid($formData)) {
 
-                $authAdapter = $this->getAuthAdapter();
-
+                
                 $username = $formData['username'];
                 $password = $formData['password'];
                 
                 $hashed = $this->hashpassword($password);
 
-                $authAdapter->setIdentity($username)
-                    ->setCredential($hashed);
+                
 
                 $auth = Zend_Auth::getInstance();
+                
+//                $auth->setStorage ( new Zend_Auth_Storage_Session ( 'New_Portal' ) );
+//                $namespace = new Zend_Session_Namespace('New_Portal');
+//                $namespace->setExpirationSeconds(7200); // 2 hours
+                
+                $authAdapter = $this->getAuthAdapter();
+                $authAdapter->setIdentity($username)
+                            ->setCredential($hashed);
+                
                 $result = $auth->authenticate($authAdapter);
 
                 if ($result->isValid())
@@ -51,6 +63,7 @@ class AuthenticationController extends Zend_Controller_Action
                     $identity = $authAdapter->getResultRowObject();
 
                     $authStorage = $auth->getStorage();
+                    $identity->portal = 'Declan_Admin'; // Write an additional variable to the auth object
                     $authStorage->write($identity);
 
                     $this->redirect('/event/index');
@@ -76,6 +89,11 @@ class AuthenticationController extends Zend_Controller_Action
     public function logoutAction()
     {
         Zend_Auth::getInstance()->clearIdentity();
+        $namespace = new \Zend_Session_Namespace( 'Zend_Auth' );
+        $namespace->unsetAll();
+        $namespace = new \Zend_Session_Namespace( 'New_Portal' );
+        $namespace->unsetAll();
+        Zend_Session::destroy( true );
         $this->redirect('index/index');
     }
 
