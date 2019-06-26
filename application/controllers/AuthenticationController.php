@@ -20,11 +20,7 @@ class AuthenticationController extends Zend_Controller_Action
 
     public function loginAction()
     {
-        // https://framework.zend.com/manual/1.0/en/zend.auth.html        This article on sessions does not seem to work. To get around this I've introduced a portal value in
-        //                                                                the auth object below
-        //die(var_dump(print_r(Zend_Auth::getInstance())));
-        //die(var_dump(print_r(Zend_Auth::getInstance()->getStorage())));
-        //die(var_dump(print_r(Zend_Auth::getInstance()->getStorage()->read())));
+        
         if (Zend_Auth::getInstance()->hasIdentity())
         {
             $this->redirect('event/addmultibleregistrants');
@@ -48,9 +44,14 @@ class AuthenticationController extends Zend_Controller_Action
 
                 $auth = Zend_Auth::getInstance();
                 
-//                $auth->setStorage ( new Zend_Auth_Storage_Session ( 'New_Portal' ) );
-//                $namespace = new Zend_Session_Namespace('New_Portal');
-//                $namespace->setExpirationSeconds(7200); // 2 hours
+                // To create a new session variable you need to use setStorage like below
+                // This creates the new session storage and now we can set the timeout with the two line below
+                // Upon a succesfull login the user gets redirected to the events page.
+                // For the New_Portal session to get carried accross to the events page we need to set the storage of the new session variable on the events page aswell.
+                // If we dont the session New_Portal isnt called, it doesnt exist and the session storage defaults back to Zend_Auth
+                $auth->setStorage(new Zend_Auth_Storage_Session('New_Portal'));
+                $namespace = new Zend_Session_Namespace('New_Portal');
+                $namespace->setExpirationSeconds(10); // 10 seconds
                 
                 $authAdapter = $this->getAuthAdapter();
                 $authAdapter->setIdentity($username)

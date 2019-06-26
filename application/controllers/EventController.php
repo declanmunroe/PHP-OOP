@@ -11,11 +11,17 @@ class EventController extends Zend_Controller_Action
 
     public function init()
     {
-        /* Initialize action controller here */
+        
         $auth = Zend_Auth::getInstance();
+        // Because this page uses a session variable New_Portal we need to specify it below to make sure we can call it after it was created when the user loged in
+        // in the previous controller/action
+        // If we dont set it here the Zend session storage defaults back to Zend_Auth
+        // This article explains the situation
+        // https://stackoverflow.com/questions/3859427/zend-auth-when-i-set-a-custom-storage-namespace-it-does-not-exist-when-i-redir
+        $auth->setStorage(new Zend_Auth_Storage_Session('New_Portal'));
         //die(var_dump(print_r(Zend_Auth::getInstance())));
         //die(var_dump(print_r(Zend_Auth::getInstance()->getStorage())));
-        die(var_dump(print_r(Zend_Auth::getInstance()->getStorage()->read())));
+        //die(var_dump(print_r(Zend_Auth::getInstance()->getStorage()->read())));
         //die(var_dump(print_r(Zend_Auth::getInstance()->hasIdentity())));
 
         if (!$auth->hasIdentity()) {
