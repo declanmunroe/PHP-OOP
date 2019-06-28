@@ -51,7 +51,7 @@ class AuthenticationController extends Zend_Controller_Action
                 // If we dont the session New_Portal isnt called, it doesnt exist and the session storage defaults back to Zend_Auth
                 $auth->setStorage(new Zend_Auth_Storage_Session('New_Portal'));
                 $namespace = new Zend_Session_Namespace('New_Portal');
-                $namespace->setExpirationSeconds(10); // 10 seconds
+                $namespace->setExpirationSeconds(3600); // 1 hour
                 
                 $authAdapter = $this->getAuthAdapter();
                 $authAdapter->setIdentity($username)
