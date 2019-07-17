@@ -60,7 +60,7 @@ class S3Controller extends Zend_Controller_Action
     }
     
     public function testawsurlsAction() {
-        die("Testing git orphan branch -- push back to ics computer");
+        die("Testing git orphan branch -- push back to ics computer--push back from new clone");
     }
 }
 
