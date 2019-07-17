@@ -1,0 +1,18 @@
+<?php
+$this->title = "Members";
+$this->headTitle($this->title);
+?>
+
+<table>
+<tr>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>&nbsp;</th>
+</tr>
+<?php foreach($this->rows as $member) : ?>
+<tr>
+    <td><?php echo $this->escape($member->name_f);?></td> <!-- $member->name_f The name_f refers to the name of the collum in the database table where we are extracting the data -->
+    <td><?php echo $this->escape($member->name_l);?></td>
+</tr>
+<?php endforeach; ?>
+</table>

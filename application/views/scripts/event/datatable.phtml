@@ -1,0 +1,34 @@
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+<script type="text/javascript" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        alert("Netbeans project");
+    });
+    $(document).ready(function () {
+        $('#datatable').dataTable();
+    });
+</script>
+
+<div style="width:500px; border:1px solid black;">
+<table id="datatable">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>First</th>
+            <th>Last</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->rows as $row) : ?>
+        <tr>
+            <td><?php echo $row['id']; ?></td>
+            <td><?php echo $row['f_name']; ?></td>
+            <td><?php echo $row['l_name']; ?></td>
+            <td><?php echo $row['email']; ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+</div>

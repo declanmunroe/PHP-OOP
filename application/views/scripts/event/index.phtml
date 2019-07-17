@@ -1,0 +1,46 @@
+<form action="/event/index" method="POST">
+    <input type="text" name="f_name">
+    <input type="text" name="l_name">
+    <input type="text" name="email">
+<select id="selectEvent" name="whatselected">
+
+    <option>Choose an Event</option>
+
+    <?php foreach ($this->listings as $listing):?>
+
+        <option value="<?php echo $listing->event_id; ?>"><?php echo $listing->title; ?></option>
+
+    <?php endforeach; ?>
+
+
+</select>
+
+<input type="submit" value="Find Registrants">
+</form>
+
+<?php print_r($_POST); ?>
+
+<table id="showRegistrants" class="table table-striped table-bordered table-hover display compact">
+    <thead>
+    <tr>
+        <th>Event ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Booked By</th>
+    </tr>
+
+    </thead>
+    <tbody>
+    <?php foreach ($this->registrants as $reg):?>
+
+        <tr>
+            <td><?php echo $reg->event_id; ?></td>
+            <td><?php echo $reg->first_name; ?></td>
+            <td><?php echo $reg->last_name;?></td>
+            <td><?php echo $reg->email; ?></td>
+            <td><?php echo $reg->booked_by; ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>

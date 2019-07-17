@@ -1,0 +1,18 @@
+<?php if (count($this->members) > 0): ?>
+<table>
+  <thead>
+    <tr>
+      <th><?php echo implode('</th><th>', array_keys(current($this->members))); ?></th>
+    </tr>
+  </thead>
+  <tbody>
+<?php foreach ($this->members as $row): array_map('htmlentities', $row); ?>
+    <tr>
+      <td><?php echo implode('</td><td>', $row); ?></td>
+    </tr>
+<?php endforeach; ?>
+  </tbody>
+</table>
+<?php endif; ?> 
+
+<h4>There are : <?php echo count($this->members); ?> people in the table</h4>

@@ -1,0 +1,21 @@
+<?php
+//die(var_dump($this->registrantdetails));
+?>
+<?php foreach ($this->registrantdetails as $details) : ?>
+<form action="/event/editregistrant" method="post" id="regform" >
+
+        <input type="hidden" name="id" value="<?php echo $details['id']; ?>">
+        <label for="fn">First Name :</label>
+        <input   id="ln" type="text" name="first_name" value="<?php echo $details['first_name']; ?>" >
+    <br>
+        <label for="fn">Last Name :</label>
+        <input   id="ln" type="text" name="last_name" value="<?php echo $details['last_name']; ?>">
+    <br>
+        <label for="email">Email :</label>
+        <input   id="email" type="text" name="email" value="<?php echo $details['email']; ?>"><br>
+
+
+    <input type="submit" value = "Update">
+
+</form>
+<?php endforeach; ?>

@@ -1,0 +1,66 @@
+<br>
+<form action="/event/addmultibleregistrants" method="post" id="regform" >
+
+    <select id="selectEvent" name="whatselected">
+
+        <option>Choose an Event</option>
+
+        <?php foreach ($this->listings as $listing):?>
+
+            <option value="<?php echo $listing->event_id; ?>"><?php echo $listing->title; ?></option>
+
+        <?php endforeach; ?>
+
+
+    </select><br><br>
+
+    <?php for($i = 0; $i < 5; $i++) : ?>
+        <label for="fn_<?php echo $i; ?>">First Name :</label>
+    <input   id="ln_<?php echo $i; ?>" type="text" name="first_name[<?php echo $i; ?>]" >
+        <label for="fn_<?php echo $i; ?>">Last Name :</label>
+    <input   id="ln_<?php echo $i; ?>" type="text" name="last_name[<?php echo $i; ?>]" >
+        <label for="email_<?php echo $i; ?>">Email :</label>
+    <input   id="email_<?php echo $i; ?>" type="text" name="email[<?php echo $i; ?>]" ><br>
+<?php endfor; ?>
+    <br>
+    <label for="booked_by">Booked by :</label>
+    <input id="booked_by" type="text" name="booked_by" ><br><br>
+    <input type="submit" value = "Submit">
+
+</form>
+<br>
+
+<table id="showRegistrants" class="table table-striped table-bordered table-hover display compact">
+    <thead>
+    <tr>
+        <th>IDda</th>
+        <th>Event ID</th>
+        <th>Title</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Booked By</th>
+        <th>Case Example</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+
+    </thead>
+    <tbody>
+    <?php foreach ($this->registrants as $reg):?>
+
+        <tr>
+            <td><?php echo $reg->id; ?></td>
+            <td><?php echo $reg->event_id; ?></td>
+            <td><?php echo $reg->title; ?></td>
+            <td><?php echo $reg->first_name; ?></td>
+            <td><?php echo $reg->last_name;?></td>
+            <td><?php echo $reg->email; ?></td>
+            <td><?php echo $reg->booked_by; ?></td>
+            <td><?php echo $reg->case_example; ?></td>
+            <td><a href="/event/editregistrant/id/<?php echo $reg->id; ?>">Edit</a></td>
+            <td><a href="/event/deleteregistrant/id/<?php echo $reg->id; ?>">Delete</a></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>

@@ -1,0 +1,40 @@
+html
+{
+    height: 100%;
+}
+
+.fixed-height
+{
+    height : 100px;
+    background-color : #438EB9;
+}
+
+.title
+{
+    color: white;
+}
+
+.links
+{
+    display: inline-block;
+}
+
+.links a
+{
+    color: white;
+    font-weight: 700;
+    margin-right: 15px;
+}
+
+/*th {*/
+    /*text-align: left;*/
+    /*background-color: blue;*/
+    /*color: white;*/
+/*}*/
+
+/*th, td {*/
+    /*border-bottom: 1px solid #ddd;*/
+/*}*/
+
+/*tr:nth-child(even) {background: #CCC}*/
+/*tr:nth-child(odd) {background: #FFF}*/

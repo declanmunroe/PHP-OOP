@@ -1,0 +1,163 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    </head>
+    
+    <body ng-app="myApp" ng-controller="myCtrl">
+        <div class="container">
+            <h1>Adding in git fix</h1>
+            <form class="form-horizontal" id="regForm" method="post">
+                <fieldset>
+        
+                  <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email">
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="exampleSelect1">Choose Day</label>
+                    <select class="form-control" id="choose_day" ng-model="whatDay" ng-options="x.event for x in days">
+                        <!--<option ng-repeat="day in days">{{ day }}</option>-->
+                    </select>
+                    <input type="hidden" name="choose_day" value="{{ whatDay.event }}"
+                  </div>
+                    
+<!--                  <div ng-if="whatDay.selected == 'Day 2 (Tuesday)'">
+                        <p>Show hidden message</p>
+                  </div>-->
+                    
+                  <fieldset class="form-group" ng-if="whatDay.event != 'Both Days (Monday and Tuesday)'">
+                    <div class="form-check">
+                      <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="day_selected"  value="monday" ng-checked="myScopeModel.specialDay" ng-model="myScopeModel.specialDay" required="">
+                        Monday
+                      </label>
+                    </div>
+                    <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="day_selected"  value="tuesday" ng-model="myScopeModel.specialDay" required="">
+                        Tuesday
+                      </label>
+                    </div>
+                  </fieldset>
+                  
+                  <div class="jumbotron" ng-if="myScopeModel.specialDay == 'tuesday' && whatDay.event != 'Both Days (Monday and Tuesday)'">
+                    <fieldset class="form-group">
+                      <div class="form-check">
+                        <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="day_option" value="full day" checked="" required="">
+                          Full Day
+                        </label>
+                      </div>
+                      <div class="form-check">
+                      <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="day_option" value="half day" required="">
+                          Half Day
+                        </label>
+                      </div>
+                    </fieldset>
+                  </div>
+                    
+                  
+                  
+                  <div class="form-group">
+                    <label for="price">Price</label>
+                    <h3>{{ whatDay.price }}</h3>
+                    <input type="hidden" class="form-control" id="price" name="price" value="{{ whatDay.price }}">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="price">Price</label>
+                    <textarea class="form-control" name="comment" id="comment" rows="3"></textarea>
+                  </div>
+                  
+<!--                  <fieldset class="form-group">
+                    <legend>Checkboxes</legend>
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" value="" checked="">
+                        Option one is this and that—be sure to include why it's great
+                      </label>
+                    </div>
+                    <div class="form-check disabled">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" value="" disabled="">
+                        Option two is disabled
+                      </label>
+                    </div>
+                  </fieldset>-->
+                    
+                  <fieldset class="form-group">
+                    <legend>Payment Method</legend>
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="payment_method" id="pay_paypal" value="paypal" checked="">
+                        Paypall
+                      </label>
+                    </div>
+                    <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="payment_method" id="pay_offline" value="offline">
+                        Offline
+                      </label>
+                    </div>
+                  </fieldset>
+                    
+                    <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+                  
+                </fieldset>
+              </form>
+        </div>
+        
+        <div class="container">
+            <div id="event_details"></div>
+        </div>
+        
+        <form id="paypal_payment" action="/angularjs/paypal" method="post">
+            <input type="hidden" name="event" value={{whatDay.event}}>
+            <input type="hidden" name="amount" value={{whatDay.price}}>
+        </form>
+    </body>
+</html>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+<script>
+    
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope) {
+    $scope.myScopeModel ={}
+    $scope.days = [{event: "One Day", price: 150}, {event: "Both Days (Monday and Tuesday)", price: 300}, {event: "Test day", price: 999}];
+    $scope.whatDay = $scope.days[0];
+        $("#submit").click(function() {
+        var data = $('#regForm').serialize();
+//        console.log(datastring);
+        
+        $.ajax({
+            type: 'POST',
+            url: '/angularjs/processdata',
+            data: data,
+            success: function(result) {
+                console.log(result);
+                console.log("The price is " + result['price']);
+                
+                if (result['payment_method'] == 'offline') {
+                    message = "<div class='well'>Thank you for registering, please contact Accounts at accounts@ics.ie or 01-2377797 to finalise your payment. </div>";
+                    $('#event_details').html(message);
+                }
+                else if (result['payment_method'] == 'paypal') {
+                    message = "<div class='well'>You will be redirected to paypal in afew seconds. </div>";
+                    $('#event_details').html(message);
+                    $('#paypal_payment').submit();
+                }
+            }
+        })
+    });
+});
+
+</script>
+

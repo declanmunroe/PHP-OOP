@@ -1,0 +1,46 @@
+<!-- Notes on everything Payment Intent -->
+<button type='button' class="buy-now" data-price='1000' data-description='ICDL Toolkit' data-eventtype='icdltoolkit' data-sucessurl='https://cms.ics-skills.net' data-uniqueid="<?php echo md5(uniqid(rand(), true)); ?>">ICDL Toolkit</button>
+<button type='button' class="buy-now" data-price='2000' data-description='Event Register' data-eventtype='eventregister' data-sucessurl='https://www.ics.ie' data-uniqueid="<?php echo md5(uniqid(rand(), true)); ?>">Event Register</button>
+
+<div id="loading" style="display: none;"><img src="https://www.techweek.ie/wp-content/themes/eventchamp-child/712.GIF" alt="Loading" /></div>
+
+<script>
+    
+$(".buy-now").click(function() {
+
+$("#loading").css('display', 'block');
+
+var price = $(this).attr('data-price');
+var description = $(this).attr('data-description');
+var type = $(this).attr('data-eventtype');
+var sucessurl = $(this).attr('data-sucessurl');
+var uniqueid = $(this).attr('data-uniqueid');
+
+    $.ajax({
+        type: 'POST',
+        url: '/stripecheckout/chargeandcreate',
+        data: {price : price, description : description, type : type, sucessurl : sucessurl, uniqueid : uniqueid},
+        success: function(response) {
+            //console.log(response);
+            console.log(response['id']);
+            
+            var session_id = response['id'];
+            
+            var stripe = Stripe('<?= STRIPE_PUBLIC_KEY; ?>');
+            
+            stripe.redirectToCheckout({
+                sessionId: session_id,
+              }).then(function (result) {
+                // If `redirectToCheckout` fails due to a browser or network
+                // error, display the localized error message to your customer
+                // using `result.error.message`.
+            });
+        }
+    });
+    
+});
+
+</script>
+
+<script src="https://js.stripe.com/v3/"></script>
+

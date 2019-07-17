@@ -1,0 +1,56 @@
+<?php
+echo '<table class="courses" id="tab11" width=100%>
+<tr id = "head">
+<th>ID</th>
+<th>Date</th>
+<th>Training Sesion</th>
+<th>Registered</th>
+<th>Attended</th>
+<th>Percentage:</th>
+<th>Income:</th>
+</tr>
+';
+
+$i=0;
+$average=0;
+foreach ($this->rows as $event) {
+$i++;
+$per = round( ($event->att / $event->total ) * 100 ,2 ) ;
+$average += $per;
+if (is_odd24($i)) {
+    echo '<tr class ="odd" >
+        <td>' . $event->id . '</td>
+        <td><b>' . strftime("%Y-%m-%d", strtotime($event->event_date)) . '</b></td>
+        <td><a href="index.php?option=com_content&view=article&id=55&ide=' . $event->id . '">' . $event->title . '</a></td>
+        <td>' . $event->total . '</td>
+        <td>' . $event->att . '</td>
+        <td>' . $per . '%</td>
+        <td>&#8364;' . $event->Income . '</td>
+        </tr>';
+} else {
+    echo '<tr class ="even" >
+        <td>' . $event->id . '</td>
+        <td><b>' . strftime("%Y-%m-%d", strtotime($event->event_date)) . '</b></td>
+        <td><a href="index.php?option=com_content&view=article&id=55&ide=' . $event->id . '">' . $event->title . '</a></td>
+        <td>' . $event->total . '</td>
+        <td>' . $event->att . '</td>
+        <td>' . $per . '%</td>
+        <td>&#8364;' . $event->Income . '</td>
+        </tr>';
+}
+}
+
+
+echo '</tr></table>';
+
+echo '<table class="courses" id="tab11" width=100%>
+<tr id = "head">
+<th>Average Events Attendence</th>
+<th>' . round( $average/$i ,2) . '% </th>
+</tr>  </table>';
+
+function is_odd24( $int )
+{
+return( $int & 1 );
+}
+?>

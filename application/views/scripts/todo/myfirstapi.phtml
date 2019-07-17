@@ -1,0 +1,37 @@
+<?php
+   $jsonfile = file_get_contents('todo.json');
+   $array = json_decode($jsonfile, true);
+
+   if ($_SERVER['REQUEST_METHOD'] === 'POST') 
+   {
+        $search = $_POST['search'];
+
+        foreach ($array as $value)
+        {
+            $taskfor[] = $value['task_for'];
+        }
+
+        if (in_array($search, $taskfor))
+        {
+            echo "Yes we have that value";
+        }
+        else
+        {
+            echo "Sorry it hasnt been added yet";
+        }
+   }
+
+   $updatedjson = file_get_contents('todo.json');
+
+?>
+<form action="" method="post">
+    <label for="search">Search</label>
+    <input id="search" type="text" name="search"><br><br>
+    <input type="submit" value="Search">
+</form>
+
+<?php
+echo '<pre>';
+echo $updatedjson;
+echo '</pre>';
+?>

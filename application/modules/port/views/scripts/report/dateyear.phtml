@@ -1,0 +1,36 @@
+<?php
+
+print '<FORM ACTION="/port/report/dateyear" METHOD="post">';
+print '<select name="year">';
+  for ($m=1950; $m<=$this->latest_year; $m++) {
+    print '<option value="'.$m.'">'.$m.'</option>';
+  }
+  print '</select>';
+
+  print '<select name="month">';
+  for ($m=0; $m<12; $m++) {
+    print '<option value="'.$this->month_array[$m].'">'.$this->month_array[$m].'</option>';
+  }
+  print '</select>';
+  ?>
+
+  <input type="SUBMIT">
+  </form>
+  
+  
+
+<table>
+<tr>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Title</th>
+    <th>&nbsp;</th>
+</tr>
+<?php foreach($this->rows as $member) : ?>
+<tr>
+    <td><?php echo $this->escape($member->first_name);?></td> <!-- $member->name_f The name_f refers to the name of the collum in the database table where we are extracting the data -->
+    <td><?php echo $this->escape($member->last_name);?></td>
+    <td><?php echo $this->escape($member->title);?></td>
+</tr>
+<?php endforeach; ?>
+</table>
