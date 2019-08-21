@@ -135,5 +135,32 @@ class StripecheckoutController extends Zend_Controller_Action
         $this->_helper->json(array('unique_id' => $intent['charges']['data'][0]['metadata']['uniqueid'], 'payment_intent' => $intent['id'], 'type' => $intent['charges']['data'][0]['metadata']['type']));
         
     }
+    
+    public function angularAction() {
+        
+        $body = $this->getRequest()->getRawBody();
+        
+        $formData = Zend_Json::decode($body);
+            
+        //$this->_helper->json($formData);
+        
+        $stripe_create_response = Session::create([
+          'payment_method_types' => ['card'],
+          'line_items' => [[
+            'name' => $formData['description'],
+            'description' => $formData['description'],
+            'images' => [],
+            'amount' => $formData['price'],
+            'currency' => 'eur',
+            'quantity' => 1,
+          ]],
+          'success_url' => "https://c9c25631.ngrok.io/stripecheckout/success/uid/{$formData['uniqueid']}",
+          'cancel_url' => 'https://c9c25631.ngrok.io/stripecheckout/cancel',
+        ]);
+          
+        $this->_helper->json($stripe_create_response);
+        
+    }
+    
 }
 

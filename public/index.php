@@ -1,5 +1,9 @@
 <?php
 
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: *");
+header("Access-Control-Allow-Methods: *");
+
 defined('PUBLIC_PATH')
 || define('PUBLIC_PATH', realpath(dirname(__FILE__)));
 

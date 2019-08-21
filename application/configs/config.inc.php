@@ -1,0 +1,6 @@
+<?php
+define("AWS_ACCESS_KEY", "AKIAILXITFAH4LSIVMSQ");
+define("AWS_SECRET_KEY", "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");
+
+define("STRIPE_PUBLIC_KEY", "pk_test_bKoEJzXJUAawQ3PNi3ZMCEcb");
+define("STRIPE_SECRET_KEY", "sk_test_6JC7BVfqGwhW6082I1ja9N7B");
