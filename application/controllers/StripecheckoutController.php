@@ -140,23 +140,34 @@ class StripecheckoutController extends Zend_Controller_Action
         
         $body = $this->getRequest()->getRawBody();
         
-        $formData = Zend_Json::decode($body);
-            
-        $this->_helper->json($formData);
+        $response = json_decode($body, true);
+        
+        $description = 'TEST'.$response['description'];
+        $price = (int) $response['price'] + 100;
+        
+        //$this->_helper->json($price);
         
         $stripe_create_response = Session::create([
           'payment_method_types' => ['card'],
           'line_items' => [[
-            'name' => $formData['description'],
-            'description' => $formData['description'],
+            'name' => $description, 
+            'description' => $description, 
             'images' => [],
-            'amount' => $formData['price'],
+            'amount' => $price,
             'currency' => 'eur',
             'quantity' => 1,
           ]],
-          'success_url' => "https://c9c25631.ngrok.io/stripecheckout/success/uid/{$formData['uniqueid']}",
-          'cancel_url' => 'https://c9c25631.ngrok.io/stripecheckout/cancel',
+          'success_url' => "https://zendcode.localhost/stripecheckout/success",
+          'cancel_url' => 'https://zendcode.localhost/stripecheckout/cancel',
         ]);
+        
+        PaymentIntent::retrieve($stripe_create_response->payment_intent);  
+        
+        PaymentIntent::update($stripe_create_response->payment_intent,['metadata' => $response]);
+        
+        PaymentIntent::update($stripe_create_response->payment_intent,['description' => $description]);
+        
+        PaymentIntent::retrieve($stripe_create_response->payment_intent);
           
         $this->_helper->json($stripe_create_response);
         
