@@ -142,7 +142,7 @@ class StripecheckoutController extends Zend_Controller_Action
         
         $formData = Zend_Json::decode($body);
             
-        //$this->_helper->json($formData);
+        $this->_helper->json($formData);
         
         $stripe_create_response = Session::create([
           'payment_method_types' => ['card'],
