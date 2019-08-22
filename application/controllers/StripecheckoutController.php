@@ -142,7 +142,7 @@ class StripecheckoutController extends Zend_Controller_Action
         
         $response = json_decode($body, true);
         
-        $description = 'TEST'.$response['description'];
+        $description = $response['description'].' Conference';
         $price = (int) $response['price'] + 100;
         
         //$this->_helper->json($price);
@@ -157,8 +157,8 @@ class StripecheckoutController extends Zend_Controller_Action
             'currency' => 'eur',
             'quantity' => 1,
           ]],
-          'success_url' => "https://zendcode.localhost/stripecheckout/success",
-          'cancel_url' => 'https://zendcode.localhost/stripecheckout/cancel',
+          'success_url' => "http://zendcode.localhost/stripecheckout/success",
+          'cancel_url' => 'http://zendcode.localhost/stripecheckout/cancel',
         ]);
         
         PaymentIntent::retrieve($stripe_create_response->payment_intent);  
