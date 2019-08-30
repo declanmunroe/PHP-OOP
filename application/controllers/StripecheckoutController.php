@@ -150,7 +150,7 @@ class StripecheckoutController extends Zend_Controller_Action
         $stripe_create_response = Session::create([
           'payment_method_types' => ['card'],
           'line_items' => [[
-            'name' => $description, 
+            'name' => $description, // "{$response['description']}" Try this format as it will probaly work
             'description' => $description, 
             'images' => [],
             'amount' => $price,
