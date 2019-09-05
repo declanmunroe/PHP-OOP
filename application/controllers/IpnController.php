@@ -30,6 +30,8 @@ class IpnController extends Zend_Controller_Action
         
         file_put_contents("ipnresult.txt", $response);
         
+        die("!");
+        
     }
     
 }
