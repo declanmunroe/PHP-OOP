@@ -28,7 +28,17 @@ class IpnController extends Zend_Controller_Action
         // Close and free up the curl handle
         curl_close($curl);
         
-        file_put_contents("ipnresult.txt", $response);
+        if ($response == "VERIFIED") {
+            
+            $file = fopen("ipnresult.txt", "w");
+            
+            foreach ($_POST as $key => $value) {
+                
+                fwrite($file, "$key => $value \r\n");
+                
+            }
+            
+        }
         
         die("!");
         
