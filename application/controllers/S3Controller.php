@@ -60,7 +60,10 @@ class S3Controller extends Zend_Controller_Action
     }
     
     public function paperuploadAction() {
-        $this->_helper->json("I like to ride my bicycle and Simon watches from left to right");
+        
+        $body = $this->getRequest()->getRawBody();
+        
+        $this->_helper->json($body);
     }
     
     public function testawsurlsAction() {
