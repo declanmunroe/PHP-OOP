@@ -59,6 +59,10 @@ class S3Controller extends Zend_Controller_Action
         }
     }
     
+    public function paperuploadAction() {
+        $this->_helper->json("I like to ride my bicycle and Simon watches from left to right");
+    }
+    
     public function testawsurlsAction() {
         die("Testing git orphan branch -- push back to ics computer--push back from new clone");
     }
