@@ -45,6 +45,10 @@ class IpnController extends Zend_Controller_Action
     }
     
     public function registerAction() {
+        // Works No cors issue at all
+        header('Access-Control-Allow-Origin: *');
+        header("Access-Control-Allow-Headers: *");
+        header("Access-Control-Allow-Methods: *");
         
         $body = $this->getRequest()->getRawBody();
         

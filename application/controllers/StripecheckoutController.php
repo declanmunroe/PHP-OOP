@@ -138,19 +138,39 @@ class StripecheckoutController extends Zend_Controller_Action
     
     public function angularAction() {
         
+        //When recieving a request from an external application like an angular application two request hit this action
+        //An OPTIONS request and a POST request
+        //For the request to be successfull we need to return a 200 status and set the headers again for the second request after the exit;
+        //We only need to set the headers again if we dont have them set in the index.php or htaccess
+        
+        //die($_SERVER['REQUEST_METHOD']);
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+            header('Access-Control-Allow-Origin: *');
+            header("Access-Control-Allow-Headers: *");
+            header("Access-Control-Allow-Methods: *");
+            header("HTTP/1.1 200 OK");
+            exit;
+        }
+        header('Access-Control-Allow-Origin: *');
+        header("Access-Control-Allow-Headers: *");
+        header("Access-Control-Allow-Methods: *");
+        
         $body = $this->getRequest()->getRawBody();
         
         $response = json_decode($body, true);
         
-        $description = $response['description'].' Conference';
-        $price = (int) $response['price'] + 100;
+        $description = $response['description'];
+        $price = $response['price'];
         
-        //$this->_helper->json($price);
+        //$description = $response['description'].' Conference';
+        //$price = (int) $response['price'] + 100;
+        
+        //$this->_helper->json(array($description, $price));
         
         $stripe_create_response = Session::create([
           'payment_method_types' => ['card'],
           'line_items' => [[
-            'name' => $description, // "{$response['description']}" Try this format as it will probaly work
+            'name' => $description,
             'description' => $description, 
             'images' => [],
             'amount' => $price,
@@ -170,8 +190,7 @@ class StripecheckoutController extends Zend_Controller_Action
         PaymentIntent::retrieve($stripe_create_response->payment_intent);
           
         $this->_helper->json($stripe_create_response);
-        
     }
-    
+        
 }
 
