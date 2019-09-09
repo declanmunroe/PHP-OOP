@@ -25,13 +25,13 @@ class S3Controller extends Zend_Controller_Action
 //            'Body'   => 'Hello!'
 //        ));
         
-        $result2 = $s3Client->putObject(array(
-            'Bucket' => 'declan-developer-upload',
-            'Key'    => 'Koala.jpg',
-            'SourceFile' => 'C:\Users\Public\Pictures\Sample Pictures\Koala.jpg'
-        ));
-        
-        echo $result2['ObjectURL'] . "\n";
+//        $result2 = $s3Client->putObject(array(
+//            'Bucket' => 'declan-developer-upload',
+//            'Key'    => 'Koala.jpg',
+//            'SourceFile' => 'C:\Users\Public\Pictures\Sample Pictures\Koala.jpg'
+//        ));
+//        
+//        echo $result2['ObjectURL'] . "\n";
     }
     
     public function uploadAction() {
