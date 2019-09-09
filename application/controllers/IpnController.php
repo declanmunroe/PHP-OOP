@@ -44,5 +44,27 @@ class IpnController extends Zend_Controller_Action
         
     }
     
+    public function registerAction() {
+        // Works No cors issue at all
+        header('Access-Control-Allow-Origin: *');
+        header("Access-Control-Allow-Headers: *");
+        header("Access-Control-Allow-Methods: *");
+        
+        $body = $this->getRequest()->getRawBody();
+        
+        $response = json_decode($body, true);
+        
+        $db = new Zend_Db_Table('am_user_holding');
+
+        $sa_user_id = $db->insert($response);
+        
+        if ($sa_user_id > 0) {
+            $this->_helper->json(['sa_user_id' => $sa_user_id, 'status' => 'success']);
+        } else {
+            $this->_helper->json(['status' => 'error']);
+        }
+        
+    }
+    
 }
 
