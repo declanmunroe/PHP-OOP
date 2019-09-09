@@ -63,7 +63,7 @@ class S3Controller extends Zend_Controller_Action
         
         $body = $this->getRequest()->getRawBody();
         
-        $this->_helper->json($body);
+        $this->_helper->json("hhhhhhhhhh");
     }
     
     public function testawsurlsAction() {
