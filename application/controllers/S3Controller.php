@@ -62,8 +62,8 @@ class S3Controller extends Zend_Controller_Action
     public function paperuploadAction() {
         
         $body = $this->getRequest()->getRawBody();
-        
-        $this->_helper->json("hhhhhhhhhh");
+        $answer = json_encode($this->getRequest());
+        $this->_helper->json($answer);
     }
     
     public function testawsurlsAction() {
