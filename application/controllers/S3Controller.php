@@ -31,7 +31,7 @@ class S3Controller extends Zend_Controller_Action
 //            'SourceFile' => 'C:\Users\Public\Pictures\Sample Pictures\Koala.jpg'
 //        ));
 //        
-//        echo $result2['ObjectURL'] . "\n";
+//        echo $result2['ObjectURL'] . "\n"; //Test commit
     }
     
     public function uploadAction() {
