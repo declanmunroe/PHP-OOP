@@ -66,5 +66,12 @@ class IpnController extends Zend_Controller_Action
         
     }
     
+    public function testpaypalsubmitAction() {
+        
+        $formData = $this->getRequest()->getPost();
+        
+        die(print_r($formData));
+    }
+    
 }
 

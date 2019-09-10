@@ -45,14 +45,18 @@ class S3Controller extends Zend_Controller_Action
         
         if ($this->getRequest()->isPost()) {
             
-            $keyName = basename($_FILES['picture']['name']);
-            $file_location = $_FILES['picture']['tmp_name'];
+            //$keyName = basename($_FILES['picture']['name']);
+            //$file_location = $_FILES['picture']['tmp_name'];
+            
+            // Taking in request from angular application and not zend view
+            $keyName = basename($_FILES['file']['name']);
+            $file_location = $_FILES['file']['tmp_name'];
             
             $upload_img = $s3Client->putObject(array(
                 'Bucket' => 'declan-developer-upload',
-                'Key'    => 'personal/'.$keyName, // Example of posting an image to a folder in a bucket
+                'Key'    => 'testupload/'.$keyName, // Example of posting an image to a folder in a bucket
                 'SourceFile' => $file_location,
-                'ContentType' => $_FILES['picture']['type'] // If i dont set the content type the image will download instead of render in the browser
+                'ContentType' => $_FILES['file']['type'] // If i dont set the content type the image will download instead of render in the browser
             ));
         
         echo "<a href='{$upload_img['ObjectURL']}'>{$upload_img['ObjectURL']}</a>";
