@@ -5,8 +5,8 @@ RewriteEngine On
 #Deny from all
 #Header set Access-Control-Allow-Origin http://localhost:4200
 
-upload_max_filesize = 20M
-post_max_size = 21M
+#upload_max_filesize = 20M
+#post_max_size = 21M
 
 RewriteCond %{REQUEST_FILENAME} -s [OR]
 RewriteCond %{REQUEST_FILENAME} -l [OR]
