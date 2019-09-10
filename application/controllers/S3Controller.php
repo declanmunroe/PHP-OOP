@@ -59,7 +59,13 @@ class S3Controller extends Zend_Controller_Action
                 'ContentType' => $_FILES['file']['type'] // If i dont set the content type the image will download instead of render in the browser
             ));
         
-        echo "<a href='{$upload_img['ObjectURL']}'>{$upload_img['ObjectURL']}</a>";
+        //echo "<a href='{$upload_img['ObjectURL']}'>{$upload_img['ObjectURL']}</a>";
+          if ($upload_img) {
+              $this->_helper->json(['status' => 'success']);
+          } else {
+              $this->_helper->json(['status' => 'fail']);
+          }
+          
         }
     }
     
