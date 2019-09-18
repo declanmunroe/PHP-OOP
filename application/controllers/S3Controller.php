@@ -24,7 +24,9 @@ class S3Controller extends Zend_Controller_Action
             "Prefix" => 'testupload/' //must have the trailing forward slash "/"
         ));
 
-        die(print_r($objects));
+        foreach ($objects as $object) {
+            echo $object['Key'] . "<br>";
+        }
         
 //        $result2 = $s3Client->putObject(array(
 //            'Bucket' => 'declan-developer-upload',
