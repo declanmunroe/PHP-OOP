@@ -13,7 +13,7 @@ class S3Controller extends Zend_Controller_Action
             )
         ));
         
-        $result = $s3Client->listObjects(array('Bucket' => 'declan-developer-upload'));
+        $result = $s3Client->listObjects(array('Bucket' => 'declan-developer-upload', 'Delimiter' => 'testupload/'));
         
         foreach ($result['Contents'] as $object) {
             echo "<a href='https://s3-eu-west-1.amazonaws.com/declan-developer-upload/{$object['Key']}'>https://s3-eu-west-1.amazonaws.com/declan-developer-upload/{$object['Key']}</a><br>";
