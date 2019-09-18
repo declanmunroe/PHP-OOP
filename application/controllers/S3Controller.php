@@ -5,6 +5,8 @@ use Aws\S3\S3Client;
 class S3Controller extends Zend_Controller_Action
 {
     public function indexAction() {
+        $this->_helper->layout()->disableLayout(); 
+        $this->_helper->viewRenderer->setNoRender(true);
         
         $s3Client = S3Client::factory(array(
             'credentials' => array(
