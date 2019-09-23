@@ -90,5 +90,42 @@ class S3Controller extends Zend_Controller_Action
     public function testawsurlsAction() {
         die("Testing git orphan branch -- push back to ics computer--push back from new clone");
     }
+    
+    public function uploadCvAction() {
+        
+        $s3Client = S3Client::factory(array(
+            'credentials' => array(
+                'key'    => AWS_ACCESS_KEY,
+                'secret' => AWS_SECRET_KEY,
+            )
+        ));
+        
+        if ($_FILES['file']['size'] == 0) {
+            
+            $this->_helper->json("No image uploaded");
+            
+        } else {
+            
+            $keyName = basename($_FILES['file']['name']);
+            $file_location = $_FILES['file']['tmp_name'];
+            $img_type = $_FILES['file']['type'];
+            
+            $upload_img = $s3Client->putObject(array(
+                'Bucket' => 'declan-developer-upload',
+                'Key'    => 'cvupload/'.$keyName, // Example of posting an image to a folder in a bucket
+                'SourceFile' => $file_location,
+                'ContentType' => $img_type
+            ));
+        
+        
+            if ($upload_img) {
+                $this->_helper->json(['status' => 'success', 'name' => $keyName, 'file_location' => $file_location, 'type' => $img_type]);
+            } else {
+                $this->_helper->json(['status' => 'fail']);
+            }
+            
+        }
+        
+    }
 }
 
