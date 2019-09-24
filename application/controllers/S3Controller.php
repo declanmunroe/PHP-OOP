@@ -127,5 +127,15 @@ class S3Controller extends Zend_Controller_Action
         }
         
     }
+    
+    public function imgWithPostDataAction() {
+        
+        //Below is how to add extra form data within the angular compnent for uploading imgs
+        //on change event
+        //user_id: any = 1298;
+        //this.formData.append('user_id', this.user_id);
+        
+        $this->_helper->json(array('img_data' => $_FILES, 'form_data' => $_POST));
+    }
 }
 
