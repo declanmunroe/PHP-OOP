@@ -179,4 +179,19 @@ class EventController extends Zend_Controller_Action
         $this->view->rows = $db->fetchAll();
         //die(print_r($rows));
     }
+    
+    public function testdebounceangularAction() {
+        $body = $this->getRequest()->getRawBody();
+        
+        $db = new Zend_Db_Table('jos_eb_registrants');
+        
+        $row = $db->fetchRow("email = '$body'");
+        
+        if ($row) {
+            $this->_helper->json(true);
+        } else {
+            $this->_helper->json(false);
+        }
+        
+    }
 }
