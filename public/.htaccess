@@ -3,6 +3,7 @@ RewriteEngine On
 # The following rule tells Apache that if the requested filename
 # exists, simply serve it.
 Deny from all
+allow from 5.149.168.74
 #Header set Access-Control-Allow-Origin http://localhost:4200
 
 #php_value upload_max_filesize = 20M
