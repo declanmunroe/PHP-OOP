@@ -3,9 +3,9 @@ RewriteEngine On
 # The following rule tells Apache that if the requested filename
 # exists, simply serve it.
 
-Order allow,deny
+#Order allow,deny
 #Allow from all
-Deny from 5.149.168.74
+#Deny from 5.149.168.74
 
 #Header set Access-Control-Allow-Origin http://localhost:4200
 
