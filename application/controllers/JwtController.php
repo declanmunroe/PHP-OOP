@@ -44,4 +44,43 @@ class JwtController extends Zend_Controller_Action
         $this->_helper->json(array("message" => "Successful login.","jwt" => $jwt));
         
     }
+    
+    public function verifytokenAction() {
+        
+        $secret_key = "declan*learning*jwt";
+        $jwt = null;
+        
+        $data = json_decode(file_get_contents("php://input"));
+        
+        $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
+        
+        $arr = explode(" ", $authHeader);
+        
+        $jwt = $arr[1];
+        
+        if($jwt){
+
+            try {
+
+                JWT::decode($jwt, $secret_key, array('HS256'));
+
+                // Access is granted. Add code of the operation here 
+
+                $this->_helper->json(array("message" => "Access granted:", "error" => $e->getMessage()));
+
+            }catch (Exception $e){
+
+                http_response_code(401);
+
+                $this->_helper->json(array("message" => "Access denied.", "error" => $e->getMessage()));
+            }
+
+        } else {
+            
+            http_response_code(401);
+
+            $this->_helper->json(array("message" => "Access denied.", "error" => $e->getMessage()));
+                
+        }
+    }
 }
