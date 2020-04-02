@@ -7,8 +7,11 @@ class JwtController extends Zend_Controller_Action
     // https://www.techiediaries.com/php-jwt-authentication-tutorial/
     public function loginAction() {
         
-        $formData = $this->getRequest()->getPost();
-        $id = (int) isset($formData['user_id']) ? $formData['user_id'] : 0;
+        $body = $this->getRequest()->getRawBody();
+        
+        $response = json_decode($body, true);
+        
+        $id = (int) isset($response['user_id']) ? $response['user_id'] : 0;
         
         $loggedInUserData = [];
         
@@ -41,17 +44,27 @@ class JwtController extends Zend_Controller_Action
 
         $jwt = JWT::encode($token, $secret_key);
         
-        $this->_helper->json(array("message" => "Successful login.","jwt" => $jwt));
+        $this->_helper->json(array("message" => "Successful login.","access_token" => $jwt));
         
     }
     
     public function verifytokenAction() {
+//        # Might be needed for cors second request
+//        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+//            header('Access-Control-Allow-Origin: *');
+//            header("Access-Control-Allow-Headers: *");
+//            header("Access-Control-Allow-Methods: *");
+//            header("HTTP/1.1 200 OK");
+//            exit;
+//        }
         
         $secret_key = "declan*learning*jwt";
         $jwt = null;
         
         $data = json_decode(file_get_contents("php://input"));
         
+        # https://stackoverflow.com/questions/26475885/authorization-header-missing-in-php-post-request
+        # Needed to add to htaccess file so I can access AUTHORIZATION in headers so I can validate against my bearer token
         $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
         
         $arr = explode(" ", $authHeader);
@@ -66,20 +79,20 @@ class JwtController extends Zend_Controller_Action
 
                 // Access is granted. Add code of the operation here 
 
-                $this->_helper->json(array("message" => "Access granted:", "error" => $e->getMessage()));
+                $this->_helper->json(array("message" => "Access", "status" => true));
 
             }catch (Exception $e){
 
                 http_response_code(401);
 
-                $this->_helper->json(array("message" => "Access denied.", "error" => $e->getMessage()));
+                $this->_helper->json(array("message" => "Access denied.", "status" => false));
             }
 
         } else {
             
             http_response_code(401);
 
-            $this->_helper->json(array("message" => "Access denied.", "error" => $e->getMessage()));
+            $this->_helper->json(array("message" => "Access denied.", "status" => false));
                 
         }
     }
