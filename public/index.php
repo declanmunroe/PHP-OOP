@@ -1,7 +1,7 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
 
 // https://stackoverflow.com/questions/28897152/increase-the-limit-of-file-upload-size-in-heroku-while-uploading-to-dropbox
 #ini_set('upload_max_filesize', '10M');
