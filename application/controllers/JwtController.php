@@ -36,7 +36,7 @@ class JwtController extends Zend_Controller_Action
             "aud" => "http://zendcode.localhost",
             "iat" => $now_seconds,
             "nbf" => $now_seconds,
-            "exp" => $now_seconds + 60 * 60,
+            "exp" => $now_seconds + 60,
             "data" => $loggedInUserData
         );
         
