@@ -11,20 +11,25 @@ class JwtController extends Zend_Controller_Action
         
         $response = json_decode($body, true);
         
-        $id = (int) isset($response['user_id']) ? $response['user_id'] : 0;
+        $password = isset($response['password']) ? $response['password'] : '';
         
         $loggedInUserData = [];
         
-        $declanUserData = array('id' => 13270, 'email' => 'declan.munroe@ics.ie', 'bike' => 'vitus sommet');
-        $kevinUserData = array('id' => 15999, 'email' => 'kevin@gmail.com', 'bike' => 'norco dh');
+        $declanUserData = array('first_name' => 'Declan', 'last_name' => 'Munroe', 'company' => 'ICS', 'country' => 'Ireland',
+                                'address1' => 'Creevagh House', 'address2' => 'Baldongan', 'town' => 'Lusk', 'county' => 'Co. Dublin',
+                                'zip' => 'WA 1236', 'email' => 'declan.munroe@ics.ie', 'phone' => '087 2542568');
         
-        if ($id == 13270) {
+        $kevinUserData = array('first_name' => 'Kevin', 'last_name' => 'Munroe', 'company' => 'UCD', 'country' => 'Ireland',
+                                'address1' => 'Creevagh House', 'address2' => 'Baldongan', 'town' => 'Lusk', 'county' => 'Co. Dublin',
+                                'zip' => 'WA 1236', 'email' => 'jevin@gmail.com', 'phone' => '086 1234567');
+        
+        if ($password == 'letmein') {
             $loggedInUserData = $declanUserData;
-        } else if ($id == 15999) {
+        } else if ($password == 'letmein01') {
             $loggedInUserData = $kevinUserData;
         } else {
             http_response_code(401);
-            $this->_helper->json(array("message" => "Login failed","id" => $id));
+            $this->_helper->json(array("message" => "Login failed","password" => $password));
         }
         
         $secret_key = "declan*learning*jwt";
