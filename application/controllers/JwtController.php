@@ -15,9 +15,9 @@ class JwtController extends Zend_Controller_Action
         
         $loggedInUserData = [];
         
-        $declanUserData = array('first_name' => 'Declan', 'last_name' => 'Munroe', 'company' => 'ICS', 'country' => 'Ireland',
-                                'address1' => 'Creevagh House', 'address2' => 'Baldongan', 'town' => 'Lusk', 'county' => 'Co. Dublin',
-                                'zip' => 'WA 1236', 'email' => 'declan.munroe@ics.ie', 'phone' => '087 2542568');
+        $declanUserData = array('first_name' => 'John', 'last_name' => 'Rowley', 'company' => 'ICS', 'country' => 'Ireland',
+                                'address1' => '87-89 Pembroke Road', 'address2' => 'Ballsbridge', 'town' => 'Dublin 4', 'county' => 'Co. Dublin',
+                                'zip' => 'A094T43', 'email' => 'john@ics.ie', 'phone' => '087 2457746');
         
         $kevinUserData = array('first_name' => 'Kevin', 'last_name' => 'Munroe', 'company' => 'UCD', 'country' => 'Ireland',
                                 'address1' => 'Creevagh House', 'address2' => 'Baldongan', 'town' => 'Lusk', 'county' => 'Co. Dublin',
