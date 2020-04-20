@@ -228,6 +228,8 @@ class StripecheckoutController extends Zend_Controller_Action
                                     'currency' => 'eur');
         }
         
+        $this->_helper->json($stripe_items);
+        
         $unique_id = md5(uniqid(rand(), true));
         
         $stripe_create_response = Session::create([
