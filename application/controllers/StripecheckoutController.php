@@ -228,6 +228,19 @@ class StripecheckoutController extends Zend_Controller_Action
                                     'currency' => 'eur');
         }
         
+        //Test shipping discount start
+        $shipping = array('name' => 'Shipping', 'description' => 'Shipping', 
+                                    'images' => array(), 'amount' => (25 * 100), 'quantity' => 1,
+                                    'currency' => 'eur');
+        
+        $discount = array('name' => 'Discount', 'description' => 'Discount', 
+                                    'images' => array(), 'amount' => -1000, 'quantity' => 1,
+                                    'currency' => 'eur');
+        
+        $stripe_items[] = $shipping;
+        $stripe_items[] = $discount;
+        //Test shipping discount end
+        
         $unique_id = md5(uniqid(rand(), true));
         
         $stripe_create_response = Session::create([
