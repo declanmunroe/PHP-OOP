@@ -14,7 +14,7 @@ class StripecheckoutController extends Zend_Controller_Action
     
     public function indexAction()
     {  
-        die("Verified");
+        die("Updated");
     }
     
     public function chargeandcreateAction()
@@ -204,7 +204,7 @@ class StripecheckoutController extends Zend_Controller_Action
         $this->_helper->json($stripe_create_response);
     }
     
-    public function shopstripeAction() {
+    public function shopStripeAction() {
         //Set the headers for the options request
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
             header('Access-Control-Allow-Origin: *');
