@@ -236,8 +236,8 @@ class StripecheckoutController extends Zend_Controller_Action
         $stripe_create_response = Session::create([
           'payment_method_types' => ['card'],
           'line_items' => [$stripe_items],
-          'success_url' => "http://zendcode.localhost/stripecheckout/success/uid/{$unique_id}",
-          'cancel_url' => 'http://zendcode.localhost/stripecheckout/cancel',
+          'success_url' => "https://zendcode.herokuapp.com/stripecheckout/success/uid/{$unique_id}",
+          'cancel_url' => 'https://zendcode.herokuapp.com/stripecheckout/cancel',
         ]);
           
         PaymentIntent::update($stripe_create_response->payment_intent,['metadata' => array('orders_id' => $response['order_id'],
