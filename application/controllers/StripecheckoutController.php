@@ -77,6 +77,15 @@ class StripecheckoutController extends Zend_Controller_Action
                 header("Location: {$intent['charges']['data'][0]['metadata']['sucessurl']}?token={$intent['charges']['data'][0]['id']}");
                 die();
                 break;
+            
+            case "shopOrder":
+                $order_holding_id = $intent['charges']['data'][0]['metadata']['orders_id'];
+                
+                $result = $this->migrateShopOrder(array('orders_id' => $order_holding_id));
+                
+                $this->_helper->json($result);
+                die();
+                break;
          
             default:
                 die("Error");
@@ -190,6 +199,87 @@ class StripecheckoutController extends Zend_Controller_Action
         PaymentIntent::retrieve($stripe_create_response->payment_intent);
           
         $this->_helper->json($stripe_create_response);
+    }
+    
+    public function shopStripeAction() {
+        
+        //Set the headers for the options request
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+            header('Access-Control-Allow-Origin: *');
+            header("Access-Control-Allow-Headers: *");
+            header("Access-Control-Allow-Methods: *");
+            header("HTTP/1.1 200 OK");
+            exit;
+        }
+        //Header are set in the index.php file so I dont need to set again
+        //Look at the angularAction above to see why and code for it
+        
+        $body = $this->getRequest()->getRawBody();
+        
+        $response = json_decode($body, true);
+        
+        $stripe_items = array();
+        
+        foreach($response['cart_items'] as $item) {
+            $stripe_items[] = array('name' => $item['products_name'], 'description' => $item['products_name'], 
+                                    'images' => array(), 'amount' => bcmul($item['products_price'], 100), 'quantity' => $item['products_quantity'],
+                                    'currency' => 'eur');
+        }
+        
+        $unique_id = md5(uniqid(rand(), true));
+        
+        $stripe_create_response = Session::create([
+          'payment_method_types' => ['card'],
+          'line_items' => [$stripe_items],
+          'success_url' => "http://zendcode.localhost/stripecheckout/success/uid/{$unique_id}",
+          'cancel_url' => 'http://zendcode.localhost/stripecheckout/cancel',
+        ]);
+          
+        PaymentIntent::update($stripe_create_response->payment_intent,['metadata' => array('orders_id' => $response['order_id'],
+                                                                                           'unique_id' => $unique_id,
+                                                                                           'type' => 'shopOrder')
+                                                                      ]); 
+        
+        PaymentIntent::update($stripe_create_response->payment_intent,['description' => "Shop Order Holding ID {$response['order_id']}"]);
+              
+        $this->_helper->json($stripe_create_response);
+        
+    }
+    
+    private function migrateShopOrder($order_id) {
+        $url = 'https://api-ics.herokuapp.com/api/order';
+        
+        // Initialize curl
+        $curl = curl_init();
+        
+        // Url to submit to
+        curl_setopt($curl, CURLOPT_URL, $url);
+        
+        // Return output instead of outputting it
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        
+        // We are doing a post request
+        curl_setopt($curl, CURLOPT_POST, true);
+        
+        // Adding the post variables to the request
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        
+        // This is set to true so will display errors on the screen if errors occur
+        curl_setopt($curl, CURLOPT_FAILONERROR, true);
+        
+        // Execute the request and fetch the response and check for errors below
+        $response = curl_exec($curl);
+        
+        if ($response === false) {
+            echo 'cURL Error: ' . curl_error($curl);
+        }
+        
+        // Close and free up the curl handle
+        curl_close($curl);
+        
+        $result = json_decode($response, true);
+        
+        return $result;
     }
         
 }
