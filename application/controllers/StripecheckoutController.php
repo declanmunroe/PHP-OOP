@@ -222,13 +222,13 @@ class StripecheckoutController extends Zend_Controller_Action
         
         $stripe_items = array();
         
+        $this->_helper->json($response);
+        
         foreach($response['cart_items'] as $item) {
             $stripe_items[] = array('name' => $item['products_name'], 'description' => $item['products_name'], 
                                     'images' => array(), 'amount' => bcmul($item['products_price'], 100), 'quantity' => $item['products_quantity'],
                                     'currency' => 'eur');
         }
-        
-        $this->_helper->json($stripe_items);
         
         $unique_id = md5(uniqid(rand(), true));
         
