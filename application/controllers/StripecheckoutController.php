@@ -219,7 +219,6 @@ class StripecheckoutController extends Zend_Controller_Action
         $body = $this->getRequest()->getRawBody();
         
         $response = json_decode($body, true);
-        $this->_helper->json($response);
         
         $stripe_items = array();
         
