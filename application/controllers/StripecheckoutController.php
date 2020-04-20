@@ -239,7 +239,7 @@ class StripecheckoutController extends Zend_Controller_Action
         ]);
           
         PaymentIntent::update($stripe_create_response->payment_intent,['metadata' => array('orders_id' => $response['order_id'],
-                                                                                           'unique_id' => $unique_id,
+                                                                                           'uniqueid' => $unique_id,
                                                                                            'type' => 'shopOrder')
                                                                       ]); 
         
