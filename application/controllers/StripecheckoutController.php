@@ -14,9 +14,7 @@ class StripecheckoutController extends Zend_Controller_Action
     
     public function indexAction()
     {  
-        $db = new Zend_Db_Table('stripe_transactions');
-        $row = $db->fetchAll();
-        die(print_r($row));
+        die("Verified");
     }
     
     public function chargeandcreateAction()
