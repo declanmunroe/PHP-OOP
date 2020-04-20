@@ -85,7 +85,7 @@ class StripecheckoutController extends Zend_Controller_Action
                 
                 $result = $this->migrateShopOrder(array('orders_id' => (int) $order_holding_id));
                 
-                header("Location: http://localhost:4200/shop/cart/checkout/success/{$result['orders_id']}");
+                header("Location: https://shop-ics.herokuapp.com/shop/cart/checkout/success/{$result['orders_id']}");
                 die();
                 
                 break;
