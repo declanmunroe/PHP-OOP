@@ -228,18 +228,14 @@ class StripecheckoutController extends Zend_Controller_Action
                                     'currency' => 'eur');
         }
         
-        //Test shipping discount start
-        $shipping = array('name' => 'Shipping', 'description' => 'Shipping', 
-                                    'images' => array(), 'amount' => (25 * 100), 'quantity' => 1,
-                                    'currency' => 'eur');
-        
-        $discount = array('name' => 'Discount', 'description' => 'Discount', 
-                                    'images' => array(), 'amount' => -1000, 'quantity' => 1,
-                                    'currency' => 'eur');
-        
-        $stripe_items[] = $shipping;
-        $stripe_items[] = $discount;
-        //Test shipping discount end
+//        Quick hack to add shipping amount to stripe checkout
+//        Cant do discount this way as stripe expects a positive number
+//        Need to check stripe api as to how to add shipping and discount propperly
+//        $shipping = array('name' => 'Shipping', 'description' => 'Shipping', 
+//                                    'images' => array(), 'amount' => (25 * 100), 'quantity' => 1,
+//                                    'currency' => 'eur');
+//        
+//        $stripe_items[] = $shipping;
         
         $unique_id = md5(uniqid(rand(), true));
         
