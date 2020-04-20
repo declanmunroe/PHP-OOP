@@ -81,10 +81,13 @@ class StripecheckoutController extends Zend_Controller_Action
             case "shopOrder":
                 $order_holding_id = $intent['charges']['data'][0]['metadata']['orders_id'];
                 
-                $result = $this->migrateShopOrder(array('orders_id' => $order_holding_id));
+                //$this->_helper->json(array('orders_id' => (int) $order_holding_id));
                 
-                $this->_helper->json($result);
+                $result = $this->migrateShopOrder(array('orders_id' => (int) $order_holding_id));
+                
+                header("Location: http://localhost:4200/shop/cart/checkout/success/{$result['orders_id']}");
                 die();
+                
                 break;
          
             default:
@@ -258,20 +261,31 @@ class StripecheckoutController extends Zend_Controller_Action
         // Return output instead of outputting it
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         
+        // I needed to set the headers to send over to dot net api
+        $header = [
+            'Content-Type: application/json',
+        ];
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+        
         // We are doing a post request
         curl_setopt($curl, CURLOPT_POST, true);
         
         // Adding the post variables to the request
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        // I needed to json_encode payload in order to send over to dot net api
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($order_id));
         
         // This is set to true so will display errors on the screen if errors occur
-        curl_setopt($curl, CURLOPT_FAILONERROR, true);
+        // If set to true is will just show a simplified error
+        // If set to false it will show the full error recieved from the server 
+        // (Best to leave it as false. You will still see the error on screen if curl fails)
+        curl_setopt($curl, CURLOPT_FAILONERROR, false);
         
         // Execute the request and fetch the response and check for errors below
         $response = curl_exec($curl);
         
         if ($response === false) {
             echo 'cURL Error: ' . curl_error($curl);
+            echo "\n" . 'HTTP code: ' . curl_errno($curl);
         }
         
         // Close and free up the curl handle
