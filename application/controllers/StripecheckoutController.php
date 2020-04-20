@@ -205,7 +205,7 @@ class StripecheckoutController extends Zend_Controller_Action
     }
     
     public function shopStripeAction() {
-        
+        $this->_helper->json("Recieved");
         //Set the headers for the options request
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
             header('Access-Control-Allow-Origin: *');
