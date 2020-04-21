@@ -223,19 +223,17 @@ class StripecheckoutController extends Zend_Controller_Action
         $stripe_items = array();
         
         foreach($response['cart_items'] as $item) {
-            $stripe_items[] = array('name' => $item['products_name'], 'description' => $item['products_name'], 
-                                    'images' => array(), 'amount' => ($item['products_price'] * 100), 'quantity' => $item['products_quantity'],
-                                    'currency' => 'eur');
+            $stripe_items[] = array('name' => $item['products_name'], 
+                                    'description' => $this->showDiscount($item['products_id'], $response['discount_unit_price'], $item['products_name']), 
+                                    'images' => array(), 'amount' => $this->setPrice($item['products_id'], $response['discount_unit_price'], $item['products_price']), 
+                                    'quantity' => $item['products_quantity'], 'currency' => 'eur');
         }
         
-//        Quick hack to add shipping amount to stripe checkout
-//        Cant do discount this way as stripe expects a positive number
-//        Need to check stripe api as to how to add shipping and discount propperly
-//        $shipping = array('name' => 'Shipping', 'description' => 'Shipping', 
-//                                    'images' => array(), 'amount' => (25 * 100), 'quantity' => 1,
-//                                    'currency' => 'eur');
-//        
-//        $stripe_items[] = $shipping;
+        $shipping = array('name' => 'Shipping', 'description' => 'Shipping', 
+                                    'images' => array(), 'amount' => (25 * 100), 'quantity' => 1,
+                                    'currency' => 'eur');
+        
+        $stripe_items[] = $shipping;
         
         $unique_id = md5(uniqid(rand(), true));
         
@@ -246,14 +244,52 @@ class StripecheckoutController extends Zend_Controller_Action
           'cancel_url' => 'https://zendcode.herokuapp.com/stripecheckout/cancel',
         ]);
           
-        PaymentIntent::update($stripe_create_response->payment_intent,['metadata' => array('orders_id' => $response['order_id'],
-                                                                                           'uniqueid' => $unique_id,
-                                                                                           'type' => 'shopOrder')
-                                                                      ]); 
+        $meta_data = array('orders_id' => $response['order_id'], 'uniqueid' => $unique_id, 'type' => 'shopOrder');
+        
+        if (sizeof($response['discount_unit_price']) > 0) {
+            $meta_data['totatDiscountGiven'] = $response['discount_total'];
+            $meta_data['couponCode'] = $response['coupon_code'];
+        }
+        
+        PaymentIntent::update($stripe_create_response->payment_intent,['metadata' => $meta_data]); 
         
         PaymentIntent::update($stripe_create_response->payment_intent,['description' => "Shop Order Holding ID {$response['order_id']}"]);
               
         $this->_helper->json($stripe_create_response);
+        
+    }
+    
+    private function showDiscount($product_id, $discount_unit_price, $product_name) {
+        
+        $description = $product_name;
+        
+        if (sizeof($discount_unit_price) > 0) {
+            foreach ($discount_unit_price as $discount) {
+                if ($product_id == $discount['product_id']) {
+                    $totalDiscountAmount = $discount['discount_amount'] * $discount['unit_quantity'];
+                    $discountAmount = $discount['discount_amount'];
+                    $description = "Discount of {$totalDiscountAmount} euro applied. €{$discountAmount} x {$discount['unit_quantity']} unit(s)";
+                }
+            }
+        }
+        
+        return $description;
+        
+    }
+    
+    private function setPrice($product_id, $discount_unit_price, $product_price) {
+        
+        $price = $product_price;
+        
+        if (sizeof($discount_unit_price) > 0) {
+            foreach ($discount_unit_price as $discount) {
+                if ($product_id == $discount['product_id']) {
+                    $price = $product_price - $discount['discount_amount'];
+                }
+            }
+        }
+        
+        return $price * 100;
         
     }
     
