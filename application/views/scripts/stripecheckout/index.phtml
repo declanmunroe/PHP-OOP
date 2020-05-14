@@ -35,6 +35,10 @@ var uniqueid = $(this).attr('data-uniqueid');
                 // error, display the localized error message to your customer
                 // using `result.error.message`.
             });
+        },
+        error: function(error) {
+            alert("Stripe error on posting. Status : " + error.status);
+            //location.reload();
         }
     });
     
