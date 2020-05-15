@@ -40,6 +40,9 @@ class StripecheckoutController extends Zend_Controller_Action
     // If any of the values are null or empty when they should contain a value I will return false so code will not try to close off invoice for example
     // and instead mark transaction as incomplete, send user to a transaction error page and notify IT team. Should still have a tranascation error page in
     // peopleserver for first version of stripe before new version of api
+    // IF ANYTHING FAILS IN THIS ACTION THE USER WILL NOT BE BROUGHT TO STRIPE TO PAY. A SIMPLE CATCH ON CLIENT SIDE WILL BE ENOUGH TO LET USER KNOW SOMETHING WENT WRONG
+    // IF A SESSION IS CREATED BUT AN UPDATE FAILS, USER WILL NOT BE BROUGHT TO STRIPE BUT DATA FOR THIS SESSION WILL EXIST IN STRIPE API BUT WE WONT CARE ABOUT THIS
+    // IT WILL DISSAPEAR DOWN THE LINE OF ALL THE INCOMPLETE OR CANCELLED TRANSACTIONS. tHE ONLY DIFFERENCE IS IT MAY NOT HAVE A DESCRIPTION OR METADATA ASSOCIATED WITH SESSION
     public function chargeandcreateAction()
     {
         $formData = $this->getRequest()->getPost();
