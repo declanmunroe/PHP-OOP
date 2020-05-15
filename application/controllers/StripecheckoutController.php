@@ -89,38 +89,49 @@ class StripecheckoutController extends Zend_Controller_Action
         $db = new Zend_Db_Table('stripe_transactions');
         $row = $db->fetchRow("unique_id = '$uid'")->toArray();
         
-        $intent = PaymentIntent::retrieve($row['payment_intent']);
-        
-        $type = $intent['charges']['data'][0]['metadata']['type'];
-        
-        switch ($type) {
-            case "eventregister":
-                header("Location: {$intent['charges']['data'][0]['metadata']['sucessurl']}?token={$intent['charges']['data'][0]['id']}");
-                die();
-                break;
+        if ($row) {
             
-            case "icdltoolkit":
-                header("Location: {$intent['charges']['data'][0]['metadata']['sucessurl']}?token={$intent['charges']['data'][0]['id']}");
-                die();
-                break;
+            $intent = PaymentIntent::retrieve($row['payment_intent']);
             
-            case "shopOrder":
-                $order_holding_id = $intent['charges']['data'][0]['metadata']['orders_id'];
+            if ($intent['status'] == 'succeeded') {
                 
-                //$this->_helper->json(array('orders_id' => (int) $order_holding_id));
+                $type = $intent['charges']['data'][0]['metadata']['type'];
+
+                switch ($type) {
+                    case "eventregister":
+                        header("Location: {$intent['charges']['data'][0]['metadata']['sucessurl']}?chargeId={$intent['charges']['data'][0]['id']}");
+                        die();
+                        break;
+
+                    case "icdltoolkit":
+                        header("Location: {$intent['charges']['data'][0]['metadata']['sucessurl']}?chargeId={$intent['charges']['data'][0]['id']}");
+                        die();
+                        break;
+
+                    case "shopOrder":
+                        $order_holding_id = $intent['charges']['data'][0]['metadata']['orders_id'];
+
+                        //$this->_helper->json(array('orders_id' => (int) $order_holding_id));
+
+                        $result = $this->migrateShopOrder(array('orders_id' => (int) $order_holding_id));
+
+                        header("Location: https://shop-ics.herokuapp.com/shop/cart/checkout/success/{$result['orders_id']}");
+                        die();
+
+                        break;
+
+                    default:
+                        die("Error");
+                }
                 
-                $result = $this->migrateShopOrder(array('orders_id' => (int) $order_holding_id));
-                
-                header("Location: https://shop-ics.herokuapp.com/shop/cart/checkout/success/{$result['orders_id']}");
-                die();
-                
-                break;
-         
-            default:
-                die("Error");
+            } else {
+                die("Transaction found but payment not successfull");
+            }
+            
+        } else {
+            die("Stripe transaction not found");
         }
-        
-        $this->_helper->json($intent);
+       
     }
     
     public function cancelAction()
@@ -130,36 +141,6 @@ class StripecheckoutController extends Zend_Controller_Action
     
     public function processstripepaymentAction() {
         // https://stripe.com/docs/payments/checkout/fulfillment   //checkout.session.completed webhook gets executed before redirect to success url
-        // Ngrok url for testing webhook https://c6c1d968.ngrok.io/stripecheckout/processstripepayment
-        
-        /*
-        $db = new Zend_Db_Table('stripe_events');
-        
-        $response = file_get_contents('php://input'); // This method gets the raw post data from a json body in json format
-
-        $response_array = json_decode($response, true);
-        
-        $params = array();
-        
-        if ($response_array['data']['object']['status'] == 'succeeded') {
-            
-            $params = array('payment_intent_id' => $response_array['data']['object']['id'], 
-                            'amount' => $response_array['data']['object']['amount'], 
-                            'charge_id' => $response_array['data']['object']['charges']['data'][0]['id'],
-                            'email' => $response_array['data']['object']['charges']['data'][0]['billing_details']['email'],
-                            'type' => $response_array['data']['object']['charges']['data'][0]['metadata']['type'],
-                            'date_created' => date('Y-m-d H:i:s', $response_array['data']['object']['created'])
-                           );
-
-            $db->insert($params);
-
-            $this->_helper->json($params);
-            
-        } else {
-            $this->_helper->json("Payment error");
-        }
-        
-        */
         
         $response = file_get_contents('php://input');
 

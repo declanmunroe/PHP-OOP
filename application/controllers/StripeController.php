@@ -45,7 +45,7 @@ class StripeController extends Zend_Controller_Action
     
     public function successAction()
     {
-        $this->view->charge_id = $charge_id = $this->getRequest()->getParam('id');
+        $this->view->charge_id = $charge_id = $this->getRequest()->getParam('chargeId');
     }
     
     public function webhookAction()
