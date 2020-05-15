@@ -59,8 +59,8 @@ class StripecheckoutController extends Zend_Controller_Action
             'currency' => 'eur',
             'quantity' => 1,
           ]],
-          'success_url' => "https://c9c25631.ngrok.io/stripecheckout/success/uid/{$formData['uniqueid']}",
-          'cancel_url' => 'https://c9c25631.ngrok.io/stripecheckout/cancel',
+          'success_url' => "https://zendcode.herokuapp.com/stripecheckout/success/uid/{$formData['uniqueid']}",
+          'cancel_url' => 'https://zendcode.herokuapp.com/stripecheckout/cancel',
         ]);
           
         PaymentIntent::retrieve($stripe_create_response->payment_intent);  // Retrieves the current state of my payment intent // Right now meta data is empty
