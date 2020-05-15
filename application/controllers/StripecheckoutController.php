@@ -149,7 +149,7 @@ class StripecheckoutController extends Zend_Controller_Action
         $intent = PaymentIntent::retrieve($response_array['data']['object']['payment_intent']);
         
         $db = new Zend_Db_Table('stripe_transactions');
-        $db->insert(array('unique_id' => $intent['charges']['data'][0]['metadata']['uniqueid'], 'payment_intent' => $intent['id'], 'type' => $intent['charges']['data'][0]['metadata']['type']));
+        $db->insert(array('unique_id' => $intent['charges']['data'][0]['metadata']['uniqueid'], 'payment_intent' => $intent['id'], 'type' => $intent['charges']['data'][0]['metadata']['type'], 'created_dt' => new Zend_Db_Expr('NOW()')));
         
         $this->_helper->json(array('unique_id' => $intent['charges']['data'][0]['metadata']['uniqueid'], 'payment_intent' => $intent['id'], 'type' => $intent['charges']['data'][0]['metadata']['type']));
         
