@@ -1,7 +1,15 @@
 <!-- Notes on everything Payment Intent -->
-<h3>Live test</h3>
+<h3>Payment Intent API</h3>
 <button type='button' class="buy-now" data-price='1000' data-description='ICDL Toolkit' data-eventtype='icdltoolkit' data-sucessurl='https://zendcode.herokuapp.com/stripe' data-uniqueid="<?php echo md5(uniqid(rand(), true)); ?>">ICDL Toolkit</button>
-<button type='button' class="buy-now" data-price='2000' data-description='Event Register' data-eventtype='eventregister' data-sucessurl='https://zendcode.herokuapp.com/stripe' data-uniqueid="<?php echo md5(uniqid(rand(), true)); ?>">Event Register</button>
+<button type='button' class="buy-now" data-price='2000' data-description='Event Register' data-eventtype='eventregister' data-sucessurl='https://zendcode.herokuapp.com/stripe' data-uniqueid="<?php echo md5(uniqid(rand(), true)); ?>">Event Register</button><br><br>
+
+<h3>Event (Subscriptions) API</h3>
+<input type="radio" class="sub" name="subscription" value="plan_HHgXVZQJrYexRB" checked>
+<label>Daily €15.50/Day</label><br>
+<input type="radio" class="sub" name="subscription" value="plan_HHfntXz6n9X0CB">
+<label>Weekly €10.00/Week</label><br><br>
+
+<button type='button' id="enter-subscription" data-uniqueid="<?php echo md5(uniqid(rand(), true)); ?>">Enter Subscription</button><br><br>
 
 <div id="loading" style="display: none;"><img src="https://www.techweek.ie/wp-content/themes/eventchamp-child/712.GIF" alt="Loading" /></div>
 
@@ -21,6 +29,41 @@ var uniqueid = $(this).attr('data-uniqueid');
         type: 'POST',
         url: '/stripecheckout/chargeandcreate',
         data: {price : price, description : description, type : type, sucessurl : sucessurl, uniqueid : uniqueid},
+        success: function(response) {
+            //console.log(response);
+            console.log(response['id']);
+            
+            var session_id = response['id'];
+            
+            var stripe = Stripe('<?= STRIPE_PUBLIC_KEY; ?>');
+            
+            stripe.redirectToCheckout({
+                sessionId: session_id,
+              }).then(function (result) {
+                // If `redirectToCheckout` fails due to a browser or network
+                // error, display the localized error message to your customer
+                // using `result.error.message`.
+            });
+        },
+        error: function(error) {
+            alert("Stripe error on posting. Status : " + error.status);
+            //location.reload();
+        }
+    });
+    
+});
+
+$("#enter-subscription").click(function() {
+
+$("#loading").css('display', 'block');
+
+var uniqueid = $(this).attr('data-uniqueid');
+var plan = $("input[name=subscription]:checked").val();
+
+    $.ajax({
+        type: 'POST',
+        url: '/stripecheckout/subscription',
+        data: {plan : plan, uniqueid : uniqueid},
         success: function(response) {
             //console.log(response);
             console.log(response['id']);

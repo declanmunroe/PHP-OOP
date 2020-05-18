@@ -59,64 +59,65 @@ class StripecheckoutController extends Zend_Controller_Action
         
         // To use Session you must have the latest version of Stripe at least 6 and above
         // Also you must have an Account name set up in https://dashboard.stripe.com/account        Declan Ics Dev was the account name i gave
-//        $stripe_create_response = Session::create([
-//          'payment_method_types' => ['card'],
-//          'customer' => 'cus_HEAqNFYemruVQw', #Associate customer with payment or remove if you want to create a new customer
-//          'line_items' => [[
-//            'name' => $formData['description'],
-//            'description' => $formData['description'],
-//            'images' => [],
-//            'amount' => $formData['price'],
-//            'currency' => 'eur',
-//            'quantity' => 1,
-//          ]],
-//          'success_url' => "https://zendcode.herokuapp.com/stripecheckout/success/uid/{$formData['uniqueid']}",
-//          'cancel_url' => 'https://zendcode.herokuapp.com/stripecheckout/cancel',
-//        ]);
+        $stripe_create_response = Session::create([
+          'payment_method_types' => ['card'],
+          #'customer' => 'cus_HEAqNFYemruVQw', #Associate customer with payment or remove if you want to create a new customer
+          'line_items' => [[
+            'name' => $formData['description'],
+            'description' => $formData['description'],
+            'images' => [],
+            'amount' => $formData['price'],
+            'currency' => 'eur',
+            'quantity' => 1,
+          ]],
+          'success_url' => "https://zendcode.herokuapp.com/stripecheckout/success/uid/{$formData['uniqueid']}",
+          'cancel_url' => 'https://zendcode.herokuapp.com/stripecheckout/cancel',
+        ]);
         
-        // Subscription
-        // https://stripe.com/docs/billing/subscriptions/overview
-        // https://stripe.com/docs/payments/checkout
+        // Cant be used for subscription. Subscription does not create a payment intent when creating session
+        PaymentIntent::retrieve($stripe_create_response->payment_intent);  // Retrieves the current state of my payment intent // Right now meta data is empty
         
-        //Add metadata as below
-        // Subscriptions do not create payment intents during session create so I cant perform an update on payment intent to add meta data
-        // On webhook I will have to pull back metadata by a different method in link below
-        // https://stripe.com/docs/api/events/retrieve
-        // I need to see if I can pull metadata from retrieving an event and see can I update a payment intent if one was created
-        // If not my webhook action and success action will have to work with both payment intent and event api calls
+        // Add the payment intent id to metadata so I can access in success after webhook is completed
+        // Webhook will always be executed before success url if my webhook is checking event checkout.session.completed set out in stripe webhook in stripe account
+        // 
+        // Cant be used for subscription. Subscription does not create a payment intent when creating session
+        PaymentIntent::update($stripe_create_response->payment_intent,['metadata' => $formData]); // Update current state to accomodate meta_data
+                                                                                                  // Metadata can only contain one array, it cannot contain array of arrays, 
+                                                                                                  // throws stripe api error if so
+        
+        // Cant be used for subscription. Subscription does not create a payment intent when creating session
+        PaymentIntent::update($stripe_create_response->payment_intent,['description' => $formData['description']]);
+        
+        // Cant be used for subscription. Subscription does not create a payment intent when creating session
+        PaymentIntent::retrieve($stripe_create_response->payment_intent); // Retrieve the updated payment intent with the meta data added to my stripe object response
+        
+        $this->_helper->json($stripe_create_response);
+    }
+    
+    // Subscription
+    // https://stripe.com/docs/billing/subscriptions/overview
+    // https://stripe.com/docs/payments/checkout
+    // Add metadata as below
+    // Subscriptions do not create payment intents during session create so I cant perform an update on payment intent to add meta data
+    // On webhook I will have to pull back metadata by a different method in link below
+    // https://stripe.com/docs/api/events/retrieve
+    public function subscriptionAction()
+    {
+        $formData = $this->getRequest()->getPost();
+        
         $stripe_create_response = \Stripe\Checkout\Session::create([
             'payment_method_types' => ['card'],
             'line_items' => [[
-              'price' => 'plan_HHgXVZQJrYexRB',
+              'price' => $formData['plan'],
               'quantity' => 1,
               ]],
             'mode' => 'subscription',
             'metadata' => $formData,
-            'success_url' => 'https://example.com/success',
-            'cancel_url' => 'https://example.com/cancel',
+            'success_url' => "https://zendcode.herokuapp.com/stripecheckout/success/uid/{$formData['uniqueid']}",
+            'cancel_url' => 'https://zendcode.herokuapp.com/stripecheckout/cancel',
         ]);
         
-        // Cant be used for subscription. Subscription does not create a payment intent when creating session
-        #PaymentIntent::retrieve($stripe_create_response->payment_intent);  // Retrieves the current state of my payment intent // Right now meta data is empty
-        
-        // Add the payment intent id to metadata so I can access in success after webhook is completed
-        // Webhook will always be executed before success url if my webhook is checking event checkout.session.completed set out in stripe webhook in stripe account
-        
-        // Cant be used for subscription
-        #PaymentIntent::update($stripe_create_response->payment_intent,['metadata' => $formData]); // Update current state to accomodate meta_data
-                                                                                                  // Metadata can only contain one array, it cannot contain array of arrays, 
-                                                                                                  // throws stripe api error if so
-        
-        // Cant be used for subscription
-        #PaymentIntent::update($stripe_create_response->payment_intent,['description' => $formData['description']]);
-        
-        // Cant be used for subscription
-        #PaymentIntent::retrieve($stripe_create_response->payment_intent); // Retrieve the updated payment intent with the meta data added to my stripe object response
-        
         $this->_helper->json($stripe_create_response);
-        
-        // Docs say to validate a propper successfull charge transaction that you should not fully rely on the success url, you should use a webhook as well.
-        // But to use a webhook it is best practice if not nessacary to have seperate stripe accounts for every stripe payment option in each website
     }
     
     public function successAction()
