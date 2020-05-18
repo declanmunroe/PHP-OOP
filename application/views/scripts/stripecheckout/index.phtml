@@ -63,7 +63,7 @@ var plan = $("input[name=subscription]:checked").val();
     $.ajax({
         type: 'POST',
         url: '/stripecheckout/subscription',
-        data: {plan : plan, uniqueid : uniqueid},
+        data: {plan : plan, uniqueid : uniqueid, type: 'membersubscription'},
         success: function(response) {
             //console.log(response);
             console.log(response['id']);

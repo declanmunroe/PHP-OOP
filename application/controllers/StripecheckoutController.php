@@ -122,6 +122,7 @@ class StripecheckoutController extends Zend_Controller_Action
     
     public function successAction()
     {
+        die("On success, last stage to update");
         $uid = $this->getParam('uid', 0);
         
         $db = new Zend_Db_Table('stripe_transactions');
