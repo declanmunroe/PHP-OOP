@@ -10,9 +10,9 @@
 <label>Weekly €10.00/Week</label><br><br>
 
 <h5>Renewal Method</h5>
-<input type="radio" class="renew" name="renew" value="auto" checked>
+<input type="radio" class="billing" name="billing" value="auto" checked>
 <label>Auto</label><br>
-<input type="radio" class="renew" name="renew" value="manual">
+<input type="radio" class="billing" name="billing" value="manual">
 <label>Manual</label><br><br>
 
 <button type='button' id="enter-subscription" data-uniqueid="<?php echo md5(uniqid(rand(), true)); ?>">Enter Subscription</button><br><br>
@@ -65,12 +65,12 @@ $("#loading").css('display', 'block');
 
 var uniqueid = $(this).attr('data-uniqueid');
 var plan = $("input[name=subscription]:checked").val();
-var renew = $("input[name=renew]:checked").val();
+var billing = $("input[name=billing]:checked").val();
 
     $.ajax({
         type: 'POST',
         url: '/stripecheckout/subscription',
-        data: {plan : plan, uniqueid : uniqueid, type: 'membersubscription', renew: renew},
+        data: {plan : plan, uniqueid : uniqueid, type: 'membersubscription', billing: billing},
         success: function(response) {
             //console.log(response);
             console.log(response['id']);
