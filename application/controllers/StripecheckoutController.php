@@ -184,6 +184,8 @@ class StripecheckoutController extends Zend_Controller_Action
 
         $response_array = json_decode($response, true);
         
+        $this->_helper->json($response_array);
+        
         $intent = PaymentIntent::retrieve($response_array['data']['object']['payment_intent']);
         
         $db = new Zend_Db_Table('stripe_transactions');
