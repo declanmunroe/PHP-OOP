@@ -65,11 +65,12 @@ $("#loading").css('display', 'block');
 
 var uniqueid = $(this).attr('data-uniqueid');
 var plan = $("input[name=subscription]:checked").val();
+var renew = $("input[name=renew]:checked").val();
 
     $.ajax({
         type: 'POST',
         url: '/stripecheckout/subscription',
-        data: {plan : plan, uniqueid : uniqueid, type: 'membersubscription'},
+        data: {plan : plan, uniqueid : uniqueid, type: 'membersubscription', renew: renew},
         success: function(response) {
             //console.log(response);
             console.log(response['id']);
