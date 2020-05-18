@@ -18,16 +18,14 @@ class StripecheckoutController extends Zend_Controller_Action
        Stripe::setApiKey(STRIPE_SECRET_KEY);
     }
     
-    // I will eventualy use this to delete all my customers 100 customers at a time
-    public function listAllCustomersAction()
+    // Update subscription so member wont be charged automaticly, they will be sent an invoice out to pay for their next subscription cycle
+    // billing property value is now called collection_method in new version of api and in api docs
+    // https://stripe.com/docs/api/subscriptions/update
+    public function updateSubscriptionAction()
     {
-//        $customers = \Stripe\Customer::all(['limit' => 100]);
-//        
-//        $this->_helper->json($customers);
+        $subscription = \Stripe\Subscription::update('sub_HHfuV1eGeFqbTo', ['billing' => 'send_invoice', 'days_until_due' => 7]);
         
-        $intent = PaymentIntent::update('pi_1Gj7PlEosXjNQZCsLVdyD3YM',['metadata' => array('declan' => 12, 'kevin' => 'brother')]);
-        
-        $this->_helper->json($intent);
+        $this->_helper->json($subscription);
     }
     
     public function indexAction()
