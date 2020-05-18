@@ -122,7 +122,6 @@ class StripecheckoutController extends Zend_Controller_Action
     
     public function successAction()
     {
-        die("On success, last stage to update");
         $uid = $this->getParam('uid', 0);
         
         $db = new Zend_Db_Table('stripe_transactions');
@@ -130,42 +129,52 @@ class StripecheckoutController extends Zend_Controller_Action
         
         if ($row) {
             
-            $intent = PaymentIntent::retrieve($row['payment_intent']);
+            $payment_mode = $row['mode'];
             
-            if ($intent['status'] == 'succeeded') {
+            if ($payment_mode == 'payment') {
                 
-                $type = $intent['charges']['data'][0]['metadata']['type'];
-
-                switch ($type) {
-                    case "eventregister":
-                        header("Location: {$intent['charges']['data'][0]['metadata']['sucessurl']}?chargeId={$intent['charges']['data'][0]['id']}");
-                        die();
-                        break;
-
-                    case "icdltoolkit":
-                        header("Location: {$intent['charges']['data'][0]['metadata']['sucessurl']}?chargeId={$intent['charges']['data'][0]['id']}");
-                        die();
-                        break;
-
-                    case "shopOrder":
-                        $order_holding_id = $intent['charges']['data'][0]['metadata']['orders_id'];
-
-                        //$this->_helper->json(array('orders_id' => (int) $order_holding_id));
-
-                        $result = $this->migrateShopOrder(array('orders_id' => (int) $order_holding_id));
-
-                        header("Location: https://shop-ics.herokuapp.com/shop/cart/checkout/success/{$result['orders_id']}");
-                        die();
-
-                        break;
-
-                    default:
-                        die("Error");
-                }
+                $data = PaymentIntent::retrieve($row['payment_intent']);
                 
-            } else {
-                die("Transaction found but payment not successfull");
+                $type = $data['charges']['data'][0]['metadata']['type'];
+                
+            } elseif ($payment_mode == 'subscription') {
+                
+                $data = \Stripe\Event::retrieve($row['payment_intent']);
+                
+                $type = $data['data']['object']['metadata']['type'];
+                
             }
+
+            switch ($type) {
+                case "eventregister":
+                    header("Location: {$data['charges']['data'][0]['metadata']['sucessurl']}?chargeId={$data['charges']['data'][0]['id']}");
+                    die();
+                    break;
+
+                case "icdltoolkit":
+                    header("Location: {$data['charges']['data'][0]['metadata']['sucessurl']}?chargeId={$data['charges']['data'][0]['id']}");
+                    die();
+                    break;
+
+                case "shopOrder":
+                    $order_holding_id = $data['charges']['data'][0]['metadata']['orders_id'];
+
+                    $result = $this->migrateShopOrder(array('orders_id' => (int) $order_holding_id));
+
+                    header("Location: https://shop-ics.herokuapp.com/shop/cart/checkout/success/{$result['orders_id']}");
+                    die();
+
+                    break;
+                
+                case "membersubscription":
+                    $this->_helper->json($data);
+                    break;
+
+                default:
+                    die("Error");
+            }
+                
+            
             
         } else {
             die("Stripe transaction not found");
@@ -193,14 +202,14 @@ class StripecheckoutController extends Zend_Controller_Action
             
             $intent = PaymentIntent::retrieve($response_array['data']['object']['payment_intent']);
             
-            $db->insert(array('unique_id' => $intent['charges']['data'][0]['metadata']['uniqueid'], 'payment_intent' => $intent['id'], 'type' => $intent['charges']['data'][0]['metadata']['type'], 'created_dt' => new Zend_Db_Expr('NOW()')));
+            $db->insert(array('unique_id' => $intent['charges']['data'][0]['metadata']['uniqueid'], 'payment_intent' => $intent['id'], 'type' => $intent['charges']['data'][0]['metadata']['type'], 'mode' => 'payment', 'created_dt' => new Zend_Db_Expr('NOW()')));
             $this->_helper->json("Payment intent transaction recorded");
             
         } elseif ($payment_mode == 'subscription') {
             
             $subscription = \Stripe\Event::retrieve($response_array['id']);
             
-            $db->insert(array('unique_id' => $subscription['data']['object']['metadata']['uniqueid'], 'payment_intent' => $subscription['id'], 'type' => $subscription['data']['object']['metadata']['uniqueid'], 'created_dt' => new Zend_Db_Expr('NOW()')));
+            $db->insert(array('unique_id' => $subscription['data']['object']['metadata']['uniqueid'], 'payment_intent' => $subscription['id'], 'type' => $subscription['data']['object']['metadata']['type'], 'mode' => 'subscription', 'created_dt' => new Zend_Db_Expr('NOW()')));
             $this->_helper->json("Subscription transaction recorded");
             
         } else {
