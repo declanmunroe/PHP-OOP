@@ -167,19 +167,18 @@ class StripecheckoutController extends Zend_Controller_Action
                     break;
                 
                 case "membersubscription":
-                    $this->_helper->json($data);
                     if ($data['data']['object']['metadata']['billing'] == 'manual') {
-                        \Stripe\Subscription::update($data['data']['subscription'], ['billing' => 'send_invoice', 'days_until_due' => 7]);
+                        \Stripe\Subscription::update($data['data']['object']['subscription'], ['billing' => 'send_invoice', 'days_until_due' => 7]);
                     }
                     
-                    $subscription = \Stripe\Subscription::retrieve($data['data']['subscription']);
+                    $subscription = \Stripe\Subscription::retrieve($data['data']['object']['subscription']);
                     
                     $this->_helper->json($subscription);
                     
                     break;
 
                 default:
-                    die("Error");
+                    die("Error on success action. Switch default hit");
             }
                 
             
