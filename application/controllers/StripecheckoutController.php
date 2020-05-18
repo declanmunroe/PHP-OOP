@@ -187,24 +187,25 @@ class StripecheckoutController extends Zend_Controller_Action
         
         $payment_mode = $response_array['data']['object']['mode'];
         
+        $db = new Zend_Db_Table('stripe_transactions');
+        
         if ($payment_mode == 'payment') {
             
             $intent = PaymentIntent::retrieve($response_array['data']['object']['payment_intent']);
-            $this->_helper->json($intent);
+            
+            $db->insert(array('unique_id' => $intent['charges']['data'][0]['metadata']['uniqueid'], 'payment_intent' => $intent['id'], 'type' => $intent['charges']['data'][0]['metadata']['type'], 'created_dt' => new Zend_Db_Expr('NOW()')));
+            $this->_helper->json("Payment intent transaction recorded");
             
         } elseif ($payment_mode == 'subscription') {
             
             $subscription = \Stripe\Event::retrieve($response_array['id']);
-            $this->_helper->json($subscription);
+            
+            $db->insert(array('unique_id' => $subscription['data']['object']['metadata']['uniqueid'], 'payment_intent' => $subscription['id'], 'type' => $subscription['data']['object']['metadata']['uniqueid'], 'created_dt' => new Zend_Db_Expr('NOW()')));
+            $this->_helper->json("Subscription transaction recorded");
             
         } else {
             $this->_helper->json("Error");
         }
-        
-//        $db = new Zend_Db_Table('stripe_transactions');
-//        $db->insert(array('unique_id' => $intent['charges']['data'][0]['metadata']['uniqueid'], 'payment_intent' => $intent['id'], 'type' => $intent['charges']['data'][0]['metadata']['type'], 'created_dt' => new Zend_Db_Expr('NOW()')));
-//        
-//        $this->_helper->json(array('unique_id' => $intent['charges']['data'][0]['metadata']['uniqueid'], 'payment_intent' => $intent['id'], 'type' => $intent['charges']['data'][0]['metadata']['type']));
         
     }
     
