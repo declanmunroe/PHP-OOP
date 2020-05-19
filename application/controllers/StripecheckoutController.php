@@ -223,20 +223,36 @@ class StripecheckoutController extends Zend_Controller_Action
         
         if ($payment_mode == 'payment') {
             
-            $intent = PaymentIntent::retrieve($response_array['data']['object']['payment_intent']);
+            try {
+                $intent = PaymentIntent::retrieve($response_array['data']['object']['payment_intent']);
             
-            $db->insert(array('unique_id' => $intent['charges']['data'][0]['metadata']['uniqueid'], 'payment_intent' => $intent['id'], 'type' => $intent['charges']['data'][0]['metadata']['type'], 'mode' => 'payment', 'created_dt' => new Zend_Db_Expr('NOW()')));
-            $this->_helper->json("Payment intent transaction recorded");
+                $db->insert(array('unique_id' => $intent['charges']['data'][0]['metadata']['uniqueid'], 'payment_intent' => $intent['id'], 'type' => $intent['charges']['data'][0]['metadata']['type'], 'mode' => 'payment', 'created_dt' => new Zend_Db_Expr('NOW()')));
+                
+                $this->_helper->json("Payment intent transaction recorded");
+            } catch (Exception $ex) {
+                $db->insert(array('unique_id' => 'WEBHOOK-ERROR', 'payment_intent' => 'WEBHOOK-ERROR', 'type' => 'WEBHOOK-ERROR', 'mode' => 'payment', 'created_dt' => new Zend_Db_Expr('NOW()')));
+                
+                $this->_helper->json($response_array);
+            }
             
         } elseif ($payment_mode == 'subscription') {
             
-            $subscription = \Stripe\Event::retrieve($response_array['id']);
+            try {
+                $subscription = \Stripe\Event::retrieve($response_array['id']);
             
-            $db->insert(array('unique_id' => $subscription['data']['object']['metadata']['uniqueid'], 'payment_intent' => $subscription['id'], 'type' => $subscription['data']['object']['metadata']['type'], 'mode' => 'subscription', 'created_dt' => new Zend_Db_Expr('NOW()')));
-            $this->_helper->json("Subscription transaction recorded");
+                $db->insert(array('unique_id' => $subscription['data']['object']['metadata']['uniqueid'], 'payment_intent' => $subscription['id'], 'type' => $subscription['data']['object']['metadata']['type'], 'mode' => 'subscription', 'created_dt' => new Zend_Db_Expr('NOW()')));
+                
+                $this->_helper->json("Subscription transaction recorded");
+            } catch (Exception $ex) {
+                $db->insert(array('unique_id' => 'WEBHOOK-ERROR', 'payment_intent' => 'WEBHOOK-ERROR', 'type' => 'WEBHOOK-ERROR', 'mode' => 'subscription', 'created_dt' => new Zend_Db_Expr('NOW()')));
+                
+                $this->_helper->json($response_array);
+            }
             
         } else {
-            $this->_helper->json("Error");
+            $db->insert(array('unique_id' => 'WEBHOOK-ERROR', 'payment_intent' => 'WEBHOOK-ERROR', 'type' => 'WEBHOOK-ERROR', 'mode' => 'UNKNOWN', 'created_dt' => new Zend_Db_Expr('NOW()')));
+                
+            $this->_helper->json($response_array);
         }
         
     }
