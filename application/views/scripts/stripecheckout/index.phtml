@@ -34,7 +34,7 @@ var uniqueid = $(this).attr('data-uniqueid');
     $.ajax({
         type: 'POST',
         url: '/stripecheckout/chargeandcreate',
-        data: {price : price, description : description, type : type, sucessurl : sucessurl, uniqueid : uniqueid},
+        data: {price : price, description : description, type : type, sucessurl : sucessurl, uniqueid : uniqueid, stripekey : 'skills'},
         success: function(response) {
             //console.log(response);
             console.log(response['id']);
@@ -70,7 +70,7 @@ var billing = $("input[name=billing]:checked").val();
     $.ajax({
         type: 'POST',
         url: '/stripecheckout/subscription',
-        data: {plan : plan, uniqueid : uniqueid, type: 'membersubscription', billing: billing},
+        data: {plan : plan, uniqueid : uniqueid, type: 'membersubscription', billing: billing, stripekey : 'member'},
         success: function(response) {
             //console.log(response);
             console.log(response['id']);

@@ -7,15 +7,17 @@ use Stripe\StripeEvent;
 
 class StripecheckoutController extends Zend_Controller_Action
 {
-    public function init()
+    private function setStripeApiKey($source)
     {
+        $stripeKey = ($source == 'skills') ? Application_Service_Config::getStripePrivateKey('skills') : (($source == 'member') ? Application_Service_Config::getStripePrivateKey('member') : '');
+        
        // You dont need to set a try catch around stripe setApiKey
        // This is here for purly for setting api key
        // You need to wrap the try catch around the stripe service method that is been used
        // This way you can write your exception handling code
        // If stripe api key is incorect then the Session::create() method will throw an exception as
        // there is an incorect api key set so the Session::create() call does not know what stripe account to post to
-       Stripe::setApiKey(STRIPE_SECRET_KEY);
+        Stripe::setApiKey($stripeKey);
     }
     
     // Update subscription so member wont be charged automaticly, they will be sent an invoice out to pay for their next subscription cycle
@@ -57,6 +59,8 @@ class StripecheckoutController extends Zend_Controller_Action
     {
         $formData = $this->getRequest()->getPost();
         
+        $this->setStripeApiKey($formData['stripekey']);
+        
         // To use Session you must have the latest version of Stripe at least 6 and above
         // Also you must have an Account name set up in https://dashboard.stripe.com/account        Declan Ics Dev was the account name i gave
         $stripe_create_response = Session::create([
@@ -70,7 +74,7 @@ class StripecheckoutController extends Zend_Controller_Action
             'currency' => 'eur',
             'quantity' => 1,
           ]],
-          'success_url' => "https://zendcode.herokuapp.com/stripecheckout/success/uid/{$formData['uniqueid']}",
+          'success_url' => "https://zendcode.herokuapp.com/stripecheckout/success/uid/{$formData['uniqueid']}/source/{$formData['stripekey']}",
           'cancel_url' => 'https://zendcode.herokuapp.com/stripecheckout/cancel',
         ]);
         
@@ -101,9 +105,14 @@ class StripecheckoutController extends Zend_Controller_Action
     // Subscriptions do not create payment intents during session create so I cant perform an update on payment intent to add meta data
     // On webhook I will have to pull back metadata by a different method in link below
     // https://stripe.com/docs/api/events/retrieve
+    
+    // EVERYTHING YOU NEED TO KNOW ABOUT SUBSCRIPTION/INVOICE LIFECYCLE HOOKS
+    // https://stripe.com/docs/billing/subscriptions/overview
     public function subscriptionAction()
     {
         $formData = $this->getRequest()->getPost();
+        
+        $this->setStripeApiKey($formData['stripekey']);
         
         $stripe_create_response = \Stripe\Checkout\Session::create([
             'payment_method_types' => ['card'],
@@ -113,7 +122,7 @@ class StripecheckoutController extends Zend_Controller_Action
               ]],
             'mode' => 'subscription',
             'metadata' => $formData,
-            'success_url' => "https://zendcode.herokuapp.com/stripecheckout/success/uid/{$formData['uniqueid']}",
+            'success_url' => "https://zendcode.herokuapp.com/stripecheckout/success/uid/{$formData['uniqueid']}/source/{$formData['stripekey']}",
             'cancel_url' => 'https://zendcode.herokuapp.com/stripecheckout/cancel',
         ]);
         
@@ -123,6 +132,9 @@ class StripecheckoutController extends Zend_Controller_Action
     public function successAction()
     {
         $uid = $this->getParam('uid', 0);
+        $source = $this->getParam('source', 'error');
+        
+        $this->setStripeApiKey($source);
         
         $db = new Zend_Db_Table('stripe_transactions');
         $row = $db->fetchRow("unique_id = '$uid'")->toArray();
@@ -196,6 +208,10 @@ class StripecheckoutController extends Zend_Controller_Action
     
     public function processstripepaymentAction() {
         // https://stripe.com/docs/payments/checkout/fulfillment   //checkout.session.completed webhook gets executed before redirect to success url
+        
+        $source = $this->getParam('source', 'error');
+        
+        $this->setStripeApiKey($source);
         
         $response = file_get_contents('php://input');
 
