@@ -127,7 +127,7 @@ class StripecheckoutController extends Zend_Controller_Action
         $this->setStripeApiKey($source);
         
         $db = new Zend_Db_Table('stripe_transactions');
-        $row = $db->fetchRow("unique_id = '$uid'")->toArray();
+        $row = $db->fetchRow("unique_id = '$uid'");
         
         if ($row) {
             
