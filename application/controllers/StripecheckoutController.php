@@ -25,36 +25,20 @@ class StripecheckoutController extends Zend_Controller_Action
     // https://stripe.com/docs/api/subscriptions/update
     public function updateSubscriptionAction()
     {
+        $this->setStripeApiKey('member');
+        
         $subscription = \Stripe\Subscription::update('sub_HHfuV1eGeFqbTo', ['billing' => 'send_invoice', 'days_until_due' => 7]);
         
         $this->_helper->json($subscription);
     }
     
-    public function indexAction()
-    {  
-        //die("Updated");
-    }
-    
     // For this action we dont need to add any exception handling
     // If stripe key is not set then Session::create() below will throw an exception because no api set
-    // The session will not be created so a simple error catch on ajax post will be enough to catch the error 
+    // The session will not be created and any subsequent code below will not run so a simple error catch on ajax post will be enough to catch the error 
     // and show user there was an error on posting. See view for this action for the error catch
-    // If perhaps api key is correct but there is a piece of broken code of an unaccepital paramater in Session::create() then
-    // an exception will be thrown and catch on client will pick up error
-    // If exception is thrown then the methods bellow Session:create() will not run in relation to updating payment intent
-    // if perhaps Session:create() does successfully create a Stripe session with a payment intent and the methods to retrieve and update
-    // payment intent below fail then the subsequent values for (metadata,description) wont be added/updated
-    // If this is the case and Stripe session is created but metadata fails to update then I will not be able to pull back important values for closing off
-    // stripe transactions such as user_id, invoice_id etc on sunsequent methods that are called withing success action
-    // But then i dont have to wory about this scenario because if Stripe session is created and meta data was not able to update I am going to be
-    // performing a check in all the different triggers that happen in success action. All the data that I pull back from intent object retrieved from stripe
-    // I am going to create a method that I will pass all values stored in an array and I will loop through value and check all values.
-    // If any of the values are null or empty when they should contain a value I will return false so code will not try to close off invoice for example
-    // and instead mark transaction as incomplete, send user to a transaction error page and notify IT team. Should still have a tranascation error page in
-    // peopleserver for first version of stripe before new version of api
-    // IF ANYTHING FAILS IN THIS ACTION THE USER WILL NOT BE BROUGHT TO STRIPE TO PAY. A SIMPLE CATCH ON CLIENT SIDE WILL BE ENOUGH TO LET USER KNOW SOMETHING WENT WRONG
-    // IF A SESSION IS CREATED BUT AN UPDATE FAILS, USER WILL NOT BE BROUGHT TO STRIPE BUT DATA FOR THIS SESSION WILL EXIST IN STRIPE API BUT WE WONT CARE ABOUT THIS
-    // IT WILL DISSAPEAR DOWN THE LINE OF ALL THE INCOMPLETE OR CANCELLED TRANSACTIONS. tHE ONLY DIFFERENCE IS IT MAY NOT HAVE A DESCRIPTION OR METADATA ASSOCIATED WITH SESSION
+    // If perhaps Session:create() does successfully create a Stripe session and the methods to retrieve and update
+    // payment intent below fail then an exception will be thrown and client will catch error. The session will exist on stripe account but it will never be completed
+    // as user was not brought to stripe checkout page (They were presented with a client error)
     public function chargeandcreateAction()
     {
         $formData = $this->getRequest()->getPost();
@@ -81,9 +65,10 @@ class StripecheckoutController extends Zend_Controller_Action
         // Cant be used for subscription. Subscription does not create a payment intent when creating session
         PaymentIntent::retrieve($stripe_create_response->payment_intent);  // Retrieves the current state of my payment intent // Right now meta data is empty
         
-        // Add the payment intent id to metadata so I can access in success after webhook is completed
-        // Webhook will always be executed before success url if my webhook is checking event checkout.session.completed set out in stripe webhook in stripe account
-        // 
+        // Add $formData to metadata so I can access in success after webhook is completed
+        // Webhook will always be executed before user is redirected to success url if my webhook is 
+        // checking event checkout.session.completed set out in stripe webhook in stripe account
+         
         // Cant be used for subscription. Subscription does not create a payment intent when creating session
         PaymentIntent::update($stripe_create_response->payment_intent,['metadata' => $formData]); // Update current state to accomodate meta_data
                                                                                                   // Metadata can only contain one array, it cannot contain array of arrays, 
@@ -240,6 +225,13 @@ class StripecheckoutController extends Zend_Controller_Action
         }
         
     }
+    
+    ##############################################################################################################
+    #
+    # ALL THE CODE BELOW IS EXPERIMENT CODE SO STRIPE AND VARIOUS THIRDPART ANGULAR APPLICATIONS
+    # IT WONT WORK AS I HAVENT INCLUDED THE NEW METHOD FOR SETTING STRIPE API KEY THAT I HAVE STARTED TO USE ABOVE
+    # 
+    ##############################################################################################################
     
     public function angularAction() {
         
