@@ -135,7 +135,7 @@ class StripecheckoutController extends Zend_Controller_Action
             
             if ($payment_mode == 'payment') {
                 
-                $data = PaymentIntent::retrieve($row['payment_intent']);
+                $data = PaymentIntent::retrieve('33');
                 
                 $type = $data['charges']['data'][0]['metadata']['type'];
                 
