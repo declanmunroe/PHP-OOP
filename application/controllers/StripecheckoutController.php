@@ -136,21 +136,27 @@ class StripecheckoutController extends Zend_Controller_Action
             if ($payment_mode == 'payment') {
                 
                 try {
-                    $data = PaymentIntent::retrieve('8');
+                    $data = PaymentIntent::retrieve($row['payment_intent']);
                 } catch (Exception $ex) {
-                    $this->getResponse()->setHttpResponseCode(500);
+                    die("Payment intent was not found");
                 }
                 
-                $type = $data['charges']['data'][0]['metadata']['type'];
+                //$type = $data['charges']['data'][0]['metadata']['type'];
                 
             } elseif ($payment_mode == 'subscription') {
                 
-                $data = \Stripe\Event::retrieve($row['payment_intent']);
+                try {
+                    $data = \Stripe\Event::retrieve($row['payment_intent']);
+                } catch (Exception $ex) {
+                    die("Event id was not found");
+                }
                 
-                $type = $data['data']['object']['metadata']['type'];
+                //$type = $data['data']['object']['metadata']['type'];
                 
             }
 
+            // If for some reason $type variable value above can not be found in api metadata they $type will have a value of NULL 
+            // and default of switch statement will be triggered
             switch ($type) {
                 case "eventregister":
                     header("Location: {$data['charges']['data'][0]['metadata']['sucessurl']}?chargeId={$data['charges']['data'][0]['id']}");
