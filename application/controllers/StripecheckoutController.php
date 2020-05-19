@@ -141,7 +141,7 @@ class StripecheckoutController extends Zend_Controller_Action
                     die("Payment intent was not found");
                 }
                 
-                //$type = $data['charges']['data'][0]['metadata']['type'];
+                $type = $data['charges']['data'][0]['metadata']['type'];
                 
             } elseif ($payment_mode == 'subscription') {
                 
@@ -151,7 +151,7 @@ class StripecheckoutController extends Zend_Controller_Action
                     die("Event id was not found");
                 }
                 
-                //$type = $data['data']['object']['metadata']['type'];
+                $type = $data['data']['object']['metadata']['type'];
                 
             }
 
