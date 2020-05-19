@@ -32,6 +32,11 @@ class StripecheckoutController extends Zend_Controller_Action
         $this->_helper->json($subscription);
     }
     
+    public function indexAction()
+    {
+        
+    }
+    
     // For this action we dont need to add any exception handling
     // If stripe key is not set then Session::create() below will throw an exception because no api set
     // The session will not be created and any subsequent code below will not run so a simple error catch on ajax post will be enough to catch the error 
