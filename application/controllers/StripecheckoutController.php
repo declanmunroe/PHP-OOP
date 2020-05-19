@@ -190,7 +190,7 @@ class StripecheckoutController extends Zend_Controller_Action
                     break;
 
                 default:
-                    die("Error on success action. Switch default hit");
+                    die("Error on success action. Switch default hit. Type is {$type}");
             }
                 
             
