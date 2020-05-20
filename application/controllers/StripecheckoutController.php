@@ -284,9 +284,9 @@ class StripecheckoutController extends Zend_Controller_Action
         $charge_id = $data['charges']['data'][0]['id'];
         // This value will not exist. this is here to check valid method below
         // If I pass $invoice_id to valid method below empty check in method will be triggered
-        $invoice_id = $data['charges']['data'][0]['metadata']['invoice_id'];
+        // $invoice_id = $data['charges']['data'][0]['metadata']['invoice_id'];
         
-        $this->areValidValues(array($charge_id,$success_url,$invoice_id));
+        $this->areValidValues(array($charge_id,$success_url));
         
         // Everything in code block ran so transaction finished and update status
         // Update transaction to status on 1 which means complete transaction
@@ -314,11 +314,17 @@ class StripecheckoutController extends Zend_Controller_Action
     
     private function membersubscription($data)
     {
+        $this->areValidValues(array($data['data']['object']['metadata']['billing'],$data['data']['object']['subscription']));
+        
         if ($data['data']['object']['metadata']['billing'] == 'manual') {
             \Stripe\Subscription::update($data['data']['object']['subscription'], ['billing' => 'send_invoice', 'days_until_due' => 7]);
         }
 
         $subscription = \Stripe\Subscription::retrieve($data['data']['object']['subscription']);
+        
+        // Everything in code block ran so transaction finished and update status
+        // Update transaction to status on 1 which means complete transaction
+        $this->updateTransactionStatus(1, $this->rowID);
 
         $this->_helper->json($subscription);
     }
