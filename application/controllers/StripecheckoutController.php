@@ -129,7 +129,9 @@ class StripecheckoutController extends Zend_Controller_Action
         $db = new Zend_Db_Table('stripe_transactions');
         $row = $db->fetchRow("unique_id = '$uid'");
         
-        if ($row) {
+        $transaction_status = ($row['status'] == 1) ? 'Processed' : 'not found';
+        
+        if ($row && ($row['status'] == 0)) {
             
             $payment_mode = $row['mode'];
             
@@ -181,7 +183,7 @@ class StripecheckoutController extends Zend_Controller_Action
             
             
         } else {
-            die("Stripe transaction not found");
+            die("Stripe transaction {$transaction_status}");
         }
        
     }
