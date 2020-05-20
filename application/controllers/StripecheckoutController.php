@@ -258,9 +258,10 @@ class StripecheckoutController extends Zend_Controller_Action
         $success_url = $data['charges']['data'][0]['metadata']['sucessurl'];
         $charge_id = $data['charges']['data'][0]['id'];
         // This value will not exist. this is here to check valid method below
+        // If I pass $invoice_id to valid method below empty check in method will be triggered
         //$invoice_id = $data['charges']['data'][0]['metadata']['invoice_id'];
         
-        $this->areValidValues(array($charge_id,$success_url,$invoice_id));
+        $this->areValidValues(array($charge_id,$success_url));
         
         die("passed valid test");
         
