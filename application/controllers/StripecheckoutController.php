@@ -159,34 +159,19 @@ class StripecheckoutController extends Zend_Controller_Action
             // and default of switch statement will be triggered
             switch ($type) {
                 case "eventregister":
-                    header("Location: {$data['charges']['data'][0]['metadata']['sucessurl']}?chargeId={$data['charges']['data'][0]['id']}");
-                    die();
+                    $this->eventregister($data);
                     break;
 
                 case "icdltoolkit":
-                    header("Location: {$data['charges']['data'][0]['metadata']['sucessurl']}?chargeId={$data['charges']['data'][0]['id']}");
-                    die();
+                    $this->icdltoolkit($data);
                     break;
 
                 case "shopOrder":
-                    $order_holding_id = $data['charges']['data'][0]['metadata']['orders_id'];
-
-                    $result = $this->migrateShopOrder(array('orders_id' => (int) $order_holding_id));
-
-                    header("Location: https://shop-ics.herokuapp.com/shop/cart/checkout/success/{$result['orders_id']}");
-                    die();
-
+                    $this->shopOrder($data);
                     break;
                 
                 case "membersubscription":
-                    if ($data['data']['object']['metadata']['billing'] == 'manual') {
-                        \Stripe\Subscription::update($data['data']['object']['subscription'], ['billing' => 'send_invoice', 'days_until_due' => 7]);
-                    }
-                    
-                    $subscription = \Stripe\Subscription::retrieve($data['data']['object']['subscription']);
-                    
-                    $this->_helper->json($subscription);
-                    
+                    $this->membersubscription($data);
                     break;
 
                 default:
@@ -255,6 +240,39 @@ class StripecheckoutController extends Zend_Controller_Action
             $this->_helper->json($response_array);
         }
         
+    }
+    
+    private function eventregister($data)
+    {
+        header("Location: {$data['charges']['data'][0]['metadata']['sucessurl']}?chargeId={$data['charges']['data'][0]['id']}");
+        die();
+    }
+    
+    private function icdltoolkit($data)
+    {
+        header("Location: {$data['charges']['data'][0]['metadata']['sucessurl']}?chargeId={$data['charges']['data'][0]['id']}");
+        die();
+    }
+    
+    private function shopOrder($data)
+    {
+        $order_holding_id = $data['charges']['data'][0]['metadata']['orders_id'];
+
+        $result = $this->migrateShopOrder(array('orders_id' => (int) $order_holding_id));
+
+        header("Location: https://shop-ics.herokuapp.com/shop/cart/checkout/success/{$result['orders_id']}");
+        die();
+    }
+    
+    private function membersubscription($data)
+    {
+        if ($data['data']['object']['metadata']['billing'] == 'manual') {
+            \Stripe\Subscription::update($data['data']['object']['subscription'], ['billing' => 'send_invoice', 'days_until_due' => 7]);
+        }
+
+        $subscription = \Stripe\Subscription::retrieve($data['data']['object']['subscription']);
+
+        $this->_helper->json($subscription);
     }
     
     ##############################################################################################################
