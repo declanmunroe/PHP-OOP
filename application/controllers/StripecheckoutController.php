@@ -215,7 +215,7 @@ class StripecheckoutController extends Zend_Controller_Action
                 
                 $this->_helper->json("Payment intent transaction recorded");
             } catch (Exception $ex) {
-                $db->insert(array('unique_id' => null, 'payment_intent' => 'WEBHOOK-ERROR', 'type' => 'WEBHOOK-ERROR', 'mode' => 'payment', 'created_dt' => new Zend_Db_Expr('NOW()')));
+                $db->insert(array('unique_id' => 'WEBHOOK-ERROR', 'payment_intent' => 'WEBHOOK-ERROR', 'type' => 'WEBHOOK-ERROR', 'mode' => 'payment', 'created_dt' => new Zend_Db_Expr('NOW()')));
                 
                 $this->_helper->json($response_array);
             }
