@@ -246,7 +246,11 @@ class StripecheckoutController extends Zend_Controller_Action
     // If not bring user to error page
     private function areValidValues($values)
     {
-        die(print_r($values));
+        foreach ($values as $val) {
+            if (empty($val)) {
+                die("found an empty value when there should'nt be. Kill transaction");
+            }
+        }
     }
     
     private function eventregister($data)
@@ -257,6 +261,8 @@ class StripecheckoutController extends Zend_Controller_Action
         $invoice_id = $data['charges']['data'][0]['metadata']['invoice_id'];
         
         $this->areValidValues(array($charge_id,$success_url,$invoice_id));
+        
+        die("passed valid test");
         
         header("Location: {$data['charges']['data'][0]['metadata']['sucessurl']}?chargeId={$data['charges']['data'][0]['id']}");
         die();
