@@ -7,6 +7,13 @@ use Stripe\StripeEvent;
 
 class StripecheckoutController extends Zend_Controller_Action
 {
+    public function init()
+    {
+        // This property represents the row id value from stripe transaction table
+        // which will be set to a value on success action which then will be used in update statement to update state of transaction in table
+        $this->rowID = 0;
+    }
+    
     private function setStripeApiKey($source)
     {
         $stripeKey = ($source == 'skills') ? Application_Service_Config::getStripePrivateKey('skills') : (($source == 'member') ? Application_Service_Config::getStripePrivateKey('member') : '');
@@ -133,9 +140,8 @@ class StripecheckoutController extends Zend_Controller_Action
         
         if ($row && ($row['status'] == 0)) {
             
-            // Update transaction to status on 1 which means complete transaction
-            // So success url can not be used twice
-            $this->updateTransactionStatus(1, $row['id']);
+            // Set the rowID of stripe transaction table
+            $this->rowID = $row['id'];
             
             $payment_mode = $row['mode'];
             
@@ -254,6 +260,8 @@ class StripecheckoutController extends Zend_Controller_Action
     {
         foreach ($values as $val) {
             if (empty($val)) {
+                // Update transaction to status on 2 which means data could not be found to finish transaction code (Close of invoices etc)
+                $this->updateTransactionStatus(2, $this->rowID);
                 $this->redirect('/stripecheckout/cancel');
             }
         }
@@ -279,6 +287,10 @@ class StripecheckoutController extends Zend_Controller_Action
         // $invoice_id = $data['charges']['data'][0]['metadata']['invoice_id'];
         
         $this->areValidValues(array($charge_id,$success_url));
+        
+        // Everything in code block ran so transaction finished and update status
+        // Update transaction to status on 1 which means complete transaction
+        $this->updateTransactionStatus(1, $this->rowID);
         
         header("Location: {$data['charges']['data'][0]['metadata']['sucessurl']}?chargeId={$data['charges']['data'][0]['id']}");
         die();
