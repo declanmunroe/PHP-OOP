@@ -242,8 +242,20 @@ class StripecheckoutController extends Zend_Controller_Action
         
     }
     
+    // Check to see if values taken from api response exist and valid to close off transaction
+    // If not bring user to error page
+    private function areValidValues($values)
+    {
+        die(print_r($values));
+    }
+    
     private function eventregister($data)
     {
+        $success_url = $data['charges']['data'][0]['metadata']['sucessurl'];
+        $charge_id = $data['charges']['data'][0]['id'];
+        
+        $this->areValidValues(array($charge_id,$success_url));
+        
         header("Location: {$data['charges']['data'][0]['metadata']['sucessurl']}?chargeId={$data['charges']['data'][0]['id']}");
         die();
     }
