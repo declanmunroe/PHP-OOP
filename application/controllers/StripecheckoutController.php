@@ -263,8 +263,6 @@ class StripecheckoutController extends Zend_Controller_Action
         
         $this->areValidValues(array($charge_id,$success_url));
         
-        die("passed test");
-        
         header("Location: {$data['charges']['data'][0]['metadata']['sucessurl']}?chargeId={$data['charges']['data'][0]['id']}");
         die();
     }
