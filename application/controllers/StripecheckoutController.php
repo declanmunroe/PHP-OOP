@@ -248,7 +248,7 @@ class StripecheckoutController extends Zend_Controller_Action
     {
         foreach ($values as $val) {
             if (empty($val)) {
-                die("found an empty value when there should'nt be. Kill transaction");
+                $this->redirect('/stripecheckout/cancel');
             }
         }
     }
@@ -263,7 +263,7 @@ class StripecheckoutController extends Zend_Controller_Action
         
         $this->areValidValues(array($charge_id,$success_url));
         
-        die("passed valid test");
+        die("passed test");
         
         header("Location: {$data['charges']['data'][0]['metadata']['sucessurl']}?chargeId={$data['charges']['data'][0]['id']}");
         die();
