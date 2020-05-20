@@ -133,6 +133,10 @@ class StripecheckoutController extends Zend_Controller_Action
         
         if ($row && ($row['status'] == 0)) {
             
+            // Update transaction to status on 1 which means complete transaction
+            // So success url can not be used twice
+            $this->updateTransactionStatus(1, $row['id']);
+            
             $payment_mode = $row['mode'];
             
             if ($payment_mode == 'payment') {
@@ -252,6 +256,17 @@ class StripecheckoutController extends Zend_Controller_Action
             if (empty($val)) {
                 $this->redirect('/stripecheckout/cancel');
             }
+        }
+    }
+    
+    private function updateTransactionStatus($status, $rowID)
+    {
+        $db = new Zend_Db_Table('stripe_transactions');
+        
+        try {
+            $db->update(array('status' => $status, "id = {$rowID}"));
+        } catch (Exception $ex) {
+            // Nothing I really want to print here or do anything at all if exception is thrown
         }
     }
     
