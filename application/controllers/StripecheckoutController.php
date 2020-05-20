@@ -264,7 +264,7 @@ class StripecheckoutController extends Zend_Controller_Action
         $db = new Zend_Db_Table('stripe_transactions');
         
         try {
-            $db->update(array('status' => $status, "id = {$rowID}"));
+            $db->update(array('status' => $status), "id = {$rowID}");
         } catch (Exception $ex) {
             // Nothing I really want to print here or do anything at all if exception is thrown
         }
