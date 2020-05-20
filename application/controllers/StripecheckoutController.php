@@ -253,8 +253,10 @@ class StripecheckoutController extends Zend_Controller_Action
     {
         $success_url = $data['charges']['data'][0]['metadata']['sucessurl'];
         $charge_id = $data['charges']['data'][0]['id'];
+        // This value will not exist. this is here to check valid method below
+        $invoice_id = $data['charges']['data'][0]['metadata']['invoice_id'];
         
-        $this->areValidValues(array($charge_id,$success_url));
+        $this->areValidValues(array($charge_id,$success_url,$invoice_id));
         
         header("Location: {$data['charges']['data'][0]['metadata']['sucessurl']}?chargeId={$data['charges']['data'][0]['id']}");
         die();
