@@ -135,7 +135,54 @@ class S3Controller extends Zend_Controller_Action
         //user_id: any = 1298;
         //this.formData.append('user_id', this.user_id);
         
-        $this->_helper->json(array('img_data' => $_FILES, 'form_data' => $_POST));
+        $s3Client = S3Client::factory(array(
+            'credentials' => array(
+                'key'    => AWS_ACCESS_KEY,
+                'secret' => AWS_SECRET_KEY,
+            )
+        ));
+        
+        if (empty($_FILES) || ($_FILES['file']['size'] == 0)) {
+            
+            $this->_helper->json("No image uploaded");
+            
+        } else {
+            
+            $originalFileName = basename($_FILES['file']['name']);
+            $uniqueId = md5(uniqid(rand(), true));
+            
+            $newFileName = $uniqueId.pathinfo($originalFileName)['dirname'].pathinfo($originalFileName)['extension'];
+            $file_location = $_FILES['file']['tmp_name'];
+            $file_type = $_FILES['file']['type'];
+            
+            $upload_img = $s3Client->putObject(array(
+                'Bucket' => 'declan-developer-upload',
+                'Key'    => 'cvupload/'.$newFileName, // Example of posting an image to a folder in a bucket
+                'SourceFile' => $file_location,
+                'ContentType' => $file_type
+            ));
+        
+        
+            if ($upload_img) {
+                
+                $user_id = $_POST['user_id'];
+                $document_id = $newFileName;
+                $description = $originalFileName;
+                $stub = 'https://iitpsa.s3-eu-west-1.amazonaws.com/uploads/';
+                $uploaded_dt = new Zend_Db_Expr('NOW()');
+                
+                $db_doc = new Zend_Db_Table('upload_documents');
+
+                $db_doc->insert(compact('user_id', 'document_id', 'description', 'stub', 'uploaded_dt'));
+                
+                $this->_helper->json(['status' => 'success', 'user_id' => $user_id, 'document_id' => $document_id, 'description' => $description, 'stub' => $stub]);
+                
+            } else {
+                $this->_helper->json(['status' => 'fail']);
+            }
+            
+        }
+        
     }
 }
 
