@@ -404,6 +404,8 @@ class StripecheckoutController extends Zend_Controller_Action
         //Header are set in the index.php file so I dont need to set again
         //Look at the angularAction above to see why and code for it
         
+        $this->setStripeApiKey('skills');
+        
         $body = $this->getRequest()->getRawBody();
         
         $response = json_decode($body, true);
@@ -417,11 +419,12 @@ class StripecheckoutController extends Zend_Controller_Action
                                     'quantity' => $item['products_quantity'], 'currency' => 'eur');
         }
         
-        $shipping = array('name' => 'Shipping', 'description' => 'Shipping', 
-                                    'images' => array(), 'amount' => (25 * 100), 'quantity' => 1,
-                                    'currency' => 'eur');
-        
-        $stripe_items[] = $shipping;
+//        Dont show any shipping prices for now and when we do shipping price will be dynamic and not hardcoded to 25 below       
+//        $shipping = array('name' => 'Shipping', 'description' => 'Shipping', 
+//                                    'images' => array(), 'amount' => (25 * 100), 'quantity' => 1,
+//                                    'currency' => 'eur');
+//        
+//        $stripe_items[] = $shipping;
         
         $unique_id = md5(uniqid(rand(), true));
         
