@@ -147,14 +147,21 @@ class S3Controller extends Zend_Controller_Action
             $this->_helper->json("No image uploaded");
             
         } else {
-            
+            #$originalFileName is the name of the file to be uploaded (s3_document.txt)
             $originalFileName = basename($_FILES['file']['name']);
+            #Generate a unique identifier
             $uniqueId = md5(uniqid(rand(), true));
             
+            #Generate a new file name which will be uniqueId, dierctory (in this case .) and file extension (txt)
+            #Produces 23a833e89122d1eaf5464e13313c3a0c.txt
             $newFileName = $uniqueId.pathinfo($originalFileName)['dirname'].pathinfo($originalFileName)['extension'];
+            
+            #Get the location of file to be uploaded
             $file_location = $_FILES['file']['tmp_name'];
+            #Get the file type
             $file_type = $_FILES['file']['type'];
             
+            #upload image to s3 bucket
             $upload_img = $s3Client->putObject(array(
                 'Bucket' => 'declan-developer-upload',
                 'Key'    => 'cvupload/'.$newFileName, // Example of posting an image to a folder in a bucket
@@ -165,15 +172,16 @@ class S3Controller extends Zend_Controller_Action
         
             if ($upload_img) {
                 
-                $user_id = $_POST['user_id'];
+                $user_id = $_POST['user_id']; // capture the user_id that was appended to the angular form. See above at top of function
                 $document_id = $newFileName;
                 $description = $originalFileName;
                 $stub = 'https://iitpsa.s3-eu-west-1.amazonaws.com/uploads/';
                 $uploaded_dt = new Zend_Db_Expr('NOW()');
                 
-                $db_doc = new Zend_Db_Table('upload_documents');
+                // Stop inserting into table
+                //$db_doc = new Zend_Db_Table('upload_documents');
 
-                $db_doc->insert(compact('user_id', 'document_id', 'description', 'stub', 'uploaded_dt'));
+                //$db_doc->insert(compact('user_id', 'document_id', 'description', 'stub', 'uploaded_dt'));
                 
                 $this->_helper->json(['status' => 'success', 'user_id' => $user_id, 'document_id' => $document_id, 'description' => $description, 'stub' => $stub]);
                 
@@ -183,6 +191,34 @@ class S3Controller extends Zend_Controller_Action
             
         }
         
+    }
+    
+    public function deleteDocumentAction()
+    {
+        $s3Client = S3Client::factory(array(
+            'credentials' => array(
+                'key'    => AWS_ACCESS_KEY,
+                'secret' => AWS_SECRET_KEY,
+            )
+        ));
+        
+        #https://docs.aws.amazon.com/aws-sdk-php/v2/api/class-Aws.S3.S3Client.html#_deleteObject
+        #https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObject.html
+        # In the docs it does also show you how to delete multiple objects with one request
+        $result = $s3Client->deleteObject(array(
+            // Bucket is required
+            'Bucket' => 'declan-developer-upload',
+            // Key is required
+            'Key' => 'cvupload/23a833e89122d1eaf5464e13313c3a0c.JPG'
+            // There are other parameters but we dont need them. See docs above
+        ));
+        
+        #The response is the same wheather is successfully deletes an object or doesn't
+        die(print_r($result));
+        
+        #When uploading images to s3 bucket, we should also append a timestamp to the unique id so file name no matter how unlikely will never be the same.
+        #When uploading or deleting files from aws s3 buckets, if the same file name is found amazon will copy over already existant file with same name
+        #This is why we should produce a file name with a unique code and time stamp so this scenario never happens
     }
 }
 

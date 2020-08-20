@@ -40,4 +40,21 @@ class CsvController extends Zend_Controller_Action
 
     }
     
+    #Read a list of emails from a scv file and generate a string that I can copy to use for an insert statement in mysql
+    public function alexAction()
+    {
+        $emails = [];
+        $quates = '""';
+        
+        $results = array_map('str_getcsv', file('C:\Users\declan.munroe\Downloads\ba_opps.csv'));
+        
+        for ($i=0; $i<sizeof($results); $i++) {
+            $emails[] = '('.$quates[0].$results[$i][6].$quates[1].')';
+        }
+        
+        $email_string = implode(",", $emails);
+        
+        die($email_string);
+    }
+    
 }
