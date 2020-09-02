@@ -420,8 +420,7 @@ class StripecheckoutController extends Zend_Controller_Action
         }
           
         // Only add shipping to stripe items array if if shipping has a value greater than 0. If not there is no shipping charge for this transaction
-        // Added isset check because this build will be pushed before angular application and here to handle if a transaction came in during the angular deploy
-        if (isset($response['shipping']) > 0) {
+        if ($response['shipping'] > 0) {
             $shipping = array('name' => 'Shipping', 'description' => 'Shipping', 
                                     'images' => array(), 'amount' => ($response['shipping'] * 100), 'quantity' => 1,
                                     'currency' => 'eur');
