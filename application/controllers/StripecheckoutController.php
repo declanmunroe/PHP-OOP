@@ -418,13 +418,15 @@ class StripecheckoutController extends Zend_Controller_Action
                                     'images' => array(), 'amount' => $this->setPrice($item['products_id'], $response['discount_unit_price'], $item['products_price']), 
                                     'quantity' => $item['products_quantity'], 'currency' => 'eur');
         }
+          
+        // Only add shipping to stripe items array if if shipping has a value greater than 0. If not there is no shipping charge for this transaction
+        if ((int) $response['shipping'] > 0) {
+            $shipping = array('name' => 'Shipping', 'description' => 'Shipping', 
+                                    'images' => array(), 'amount' => ((int) $response['shipping'] * 100), 'quantity' => 1,
+                                    'currency' => 'eur');
         
-//        Dont show any shipping prices for now and when we do shipping price will be dynamic and not hardcoded to 25 below       
-//        $shipping = array('name' => 'Shipping', 'description' => 'Shipping', 
-//                                    'images' => array(), 'amount' => (25 * 100), 'quantity' => 1,
-//                                    'currency' => 'eur');
-//        
-//        $stripe_items[] = $shipping;
+            $stripe_items[] = $shipping;
+        }
         
         $unique_id = md5(uniqid(rand(), true));
         
