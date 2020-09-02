@@ -420,9 +420,9 @@ class StripecheckoutController extends Zend_Controller_Action
         }
           
         // Only add shipping to stripe items array if if shipping has a value greater than 0. If not there is no shipping charge for this transaction
-        if ((int) $response['shipping'] > 0) {
+        if ($response['shipping'] > 0) {
             $shipping = array('name' => 'Shipping', 'description' => 'Shipping', 
-                                    'images' => array(), 'amount' => ((int) $response['shipping'] * 100), 'quantity' => 1,
+                                    'images' => array(), 'amount' => ($response['shipping'] * 100), 'quantity' => 1,
                                     'currency' => 'eur');
         
             $stripe_items[] = $shipping;
