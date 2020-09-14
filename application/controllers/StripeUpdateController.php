@@ -31,6 +31,6 @@ class StripeUpdateController extends Zend_Controller_Action
 
         $response_array = json_decode($response, true);
         
-        $this->_helper->json(array($response_array['data']['object']['application'], $response_array['data']['object']['description']));
+        $this->_helper->json(array($response_array['data']['object']['applicatmmmmmion'], $response_array['data']['object']['description']));
     }
 }
