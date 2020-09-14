@@ -31,6 +31,7 @@ class StripeUpdateController extends Zend_Controller_Action
 
         $response_array = json_decode($response, true);
         
-        $this->_helper->json($response_array['data']['object']['id']);
+        $payment_intent = PaymentIntent::retrieve($response_array['data']['object']['id']);
+        $this->_helper->json($payment_intent['description']);
     }
 }
