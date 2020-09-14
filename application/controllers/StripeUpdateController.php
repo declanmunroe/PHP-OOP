@@ -19,8 +19,6 @@ class StripeUpdateController extends Zend_Controller_Action
         //$this->_helper->json($response_array['data']['object']['payment_intent']); correct
         $intent = PaymentIntent::retrieve('pi_1HMzEWEosXjNQZCsyyO6stAj');
         
-        $this->_helper->json($intent);
-        
-        //$this->_helper->json(array('unique_id' => $intent['charges']['data'][0]['metadata']['uniqueid'], 'payment_intent' => $intent['id'], 'type' => $intent['charges']['data'][0]['metadata']['customtype']));
+        $this->_helper->json(array('unique_id' => $intent['charges']['data'][0]['metadata']['uniqueid'], 'payment_intent' => $intent['id'], 'type' => $intent['charges']['data'][0]['metadata']['type']));
     }
 }
