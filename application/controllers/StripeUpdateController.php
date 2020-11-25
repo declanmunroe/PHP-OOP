@@ -19,7 +19,7 @@ class StripeUpdateController extends Zend_Controller_Action
         
         $intent = PaymentIntent::retrieve('pi_1Gn6XOEosXjNQZCsTYcyYUIx');
         
-        $this->_helper->json(array('metadata' => $intent['charges']['data'][0]['metadata'], 'payment_intent' => $intent['id']));
+        $this->_helper->json($intent);
     }
     
     // Works with new version of stripe api 2020-08-27
