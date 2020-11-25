@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cdcb296e2f5db5329e080d0c8dc204b3",
+    "content-hash": "6c2f4c9cbd665481a759052a627b456f",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -210,16 +210,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v6.34.2",
+            "version": "v6.30.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "60335d5dad000fb4b08aa7176b832a59d13d0420"
+                "reference": "3ed30726812ac4bdd2b208c2fe3d00ef5cfe54f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/60335d5dad000fb4b08aa7176b832a59d13d0420",
-                "reference": "60335d5dad000fb4b08aa7176b832a59d13d0420",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/3ed30726812ac4bdd2b208c2fe3d00ef5cfe54f6",
+                "reference": "3ed30726812ac4bdd2b208c2fe3d00ef5cfe54f6",
                 "shasum": ""
             },
             "require": {
@@ -262,7 +262,7 @@
                 "payment processing",
                 "stripe"
             ],
-            "time": "2019-04-26T18:30:55+00:00"
+            "time": "2019-02-25T18:51:15+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
