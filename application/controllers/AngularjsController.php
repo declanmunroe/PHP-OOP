@@ -18,5 +18,9 @@ class AngularjsController extends Zend_Controller_Action
         $formData = $this->getRequest()->getPost();
         die(print_r($formData));
     }
+    
+    public function customElementsAction() {
+        $this->_helper->layout()->disableLayout();
+    }
 }
 
